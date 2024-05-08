@@ -24,6 +24,7 @@ typedef struct ElementList {
 }  ElementList;
 
 void ElementList_Add(ElementList **, Element *);
+void ElementList_Resize(ElementList **, Vector2);
 void ElementList_Draw(ElementList *);
 
 void ElementList_Add(ElementList **list, Element *node) {

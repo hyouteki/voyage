@@ -8,9 +8,8 @@ int main() {
 	InitWindow(900, 720, "Voyage Demo");
 	SetTargetFPS(60);
 	
-	const int width = GetScreenWidth();
-	const int height = GetScreenHeight();
-	Sidebar sidebar = Sidebar_Init(width*0.25, height, DARKGRAY);
+	int width = GetScreenWidth(), height = GetScreenHeight();
+	Sidebar sidebar = Sidebar_Init((Vector2){width, height}, DARKGRAY);
 	ButtonOptions buttonOptions = (ButtonOptions){.centerText=1};
 	Vector2 buttonPos = (Vector2){width/2, height/2};
 	Button button = Button_Init(buttonPos, 200, BLACK,
@@ -19,6 +18,11 @@ int main() {
 	Sidebar_AddElement(&sidebar, &element);
 	
 	while (!WindowShouldClose()) {
+		width = GetScreenWidth();
+		height = GetScreenHeight();
+
+		Sidebar_Resize(&sidebar, (Vector2){width, height});
+		
 		BeginDrawing();
 		Sidebar_Draw(sidebar);
 		/* Button_Draw(button); */

@@ -5,19 +5,24 @@
 #include "../raylib/include/raylib.h"
 #include "elements.h"
 
+// TODO: move this to Sidebar_Options
+#define SIDEBAR_WIDTH_FACTOR 0.25
+#define Sidebar_Size(windowSize, widthFactor) \
+	((Vector2){windowSize.x*widthFactor, windowSize.y})
+
 typedef struct Sidebar {
-	int width;
-	int height;
+	Vector2 size;
 	Color color;
 	ElementList *elements;
 } Sidebar;
 
-Sidebar Sidebar_Init(int, int, Color);
+Sidebar Sidebar_Init(Vector2, Color);
 void Sidebar_AddElement(Sidebar *, Element *);
+void Sidebar_Resize(Sidebar *, Vector2);
 void Sidebar_Draw(Sidebar);
 
-Sidebar Sidebar_Init(int width, int height, Color color) {
-	return (Sidebar){.width=width, .height=height,
+Sidebar Sidebar_Init(Vector2 windowSize, Color color) {
+	return (Sidebar){.size=Sidebar_Size(windowSize, SIDEBAR_WIDTH_FACTOR),
 					 .color=color, .elements=NULL};
 }
 
@@ -25,8 +30,12 @@ void Sidebar_AddElement(Sidebar *sidebar, Element *element) {
 	ElementList_Add(&sidebar->elements, element);
 }
 
+void Sidebar_Resize(Sidebar *sidebar, Vector2 windowSize) {
+	sidebar->size=Sidebar_Size(windowSize, SIDEBAR_WIDTH_FACTOR);
+}
+
 void Sidebar_Draw(Sidebar sidebar) {
-	DrawRectangle(0, 0, sidebar.width, sidebar.height, sidebar.color);
+	DrawRectangleV((Vector2){0, 0}, sidebar.size, sidebar.color);
 	ElementList_Draw(sidebar.elements);
 }
 
