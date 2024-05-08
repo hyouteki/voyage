@@ -9,13 +9,21 @@ int main() {
 	SetTargetFPS(60);
 	
 	int width = GetScreenWidth(), height = GetScreenHeight();
+
 	Sidebar sidebar = Sidebar_Init((Vector2){width, height}, DARKGRAY);
-	ButtonOptions buttonOptions = (ButtonOptions){.centerText=1};
-	Vector2 buttonPos = (Vector2){width/2, height/2};
-	Button button = Button_Init(buttonPos, 200, BLACK,
-								"Hello moto", buttonOptions);
-	Element element = (Element){.type=BUTTON, .button=button};
-	Sidebar_AddElement(&sidebar, &element);
+
+	ButtonOptions buttonOptions = (ButtonOptions)			\
+		{.centerText=1, .bgColor=BLACK, .fgColor=WHITE};
+
+	Button menuButton1 = Button_Init(Vector2Dummy, 0, "Menu button 1",
+								buttonOptions);
+	Element element1 = (Element){.type=BUTTON, .button=menuButton1};
+	Sidebar_AddElement(&sidebar, &element1);
+
+	Button menuButton2 = Button_Init(Vector2Dummy, 0, "Menu button 2",
+									 buttonOptions);
+	Element element2 = (Element){.type=BUTTON, .button=menuButton2};
+	Sidebar_AddElement(&sidebar, &element2);
 	
 	while (!WindowShouldClose()) {
 		width = GetScreenWidth();
@@ -25,10 +33,10 @@ int main() {
 		
 		BeginDrawing();
 		Sidebar_Draw(sidebar);
-		/* Button_Draw(button); */
 		ClearBackground(GRAY);
 		EndDrawing();
 	}
 	CloseWindow();
+	
 	return 0;
 }

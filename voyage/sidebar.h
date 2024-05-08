@@ -5,33 +5,57 @@
 #include "../raylib/include/raylib.h"
 #include "elements.h"
 
-// TODO: move this to Sidebar_Options
-#define SIDEBAR_WIDTH_FACTOR 0.25
-#define Sidebar_Size(windowSize, widthFactor) \
-	((Vector2){windowSize.x*widthFactor, windowSize.y})
+typedef struct SidebarOptions {
+	double widthFactor;
+} SidebarOptions;
+
+#define SidebarDefaultOptions ((SidebarOptions){.widthFactor=0.25})
 
 typedef struct Sidebar {
 	Vector2 size;
 	Color color;
 	ElementList *elements;
+	SidebarOptions options;
 } Sidebar;
 
+#define Sidebar_Size(windowSize, options) \
+	((Vector2){windowSize.x*(options.widthFactor), windowSize.y})
+
 Sidebar Sidebar_Init(Vector2, Color);
+void Sidebar_SetOptions(Sidebar *, SidebarOptions);
 void Sidebar_AddElement(Sidebar *, Element *);
 void Sidebar_Resize(Sidebar *, Vector2);
 void Sidebar_Draw(Sidebar);
 
 Sidebar Sidebar_Init(Vector2 windowSize, Color color) {
-	return (Sidebar){.size=Sidebar_Size(windowSize, SIDEBAR_WIDTH_FACTOR),
-					 .color=color, .elements=NULL};
+	return (Sidebar){.size=Sidebar_Size(windowSize, SidebarDefaultOptions),
+					 .color=color, .elements=NULL,
+					 .options=SidebarDefaultOptions};
+}
+
+void Sidebar_SetOptions(Sidebar *sidebar, SidebarOptions options) {
+	sidebar->options = options;
 }
 
 void Sidebar_AddElement(Sidebar *sidebar, Element *element) {
+	int height = ElementList_TotalHeightTill(sidebar->elements, -1);
+	Element_ResizeReposition(element, (Vector2){0, height},
+							 (Vector2){sidebar->size.x, 0});
 	ElementList_Add(&sidebar->elements, element);
 }
 
 void Sidebar_Resize(Sidebar *sidebar, Vector2 windowSize) {
-	sidebar->size=Sidebar_Size(windowSize, SIDEBAR_WIDTH_FACTOR);
+	sidebar->size=Sidebar_Size(windowSize, sidebar->options);
+	ElementList *itr = sidebar->elements;
+	int _counter = 0;
+	while (itr) {
+		int height = ElementList_TotalHeightTill(sidebar->elements,
+												 _counter);
+		Element_ResizeReposition(itr->element, (Vector2){0, height},
+								 (Vector2){sidebar->size.x, 0});
+		itr = itr->next;
+		_counter++;
+	}
 }
 
 void Sidebar_Draw(Sidebar sidebar) {

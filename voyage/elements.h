@@ -11,6 +11,7 @@
 #define LABEL 1
 
 typedef struct Element {
+	int id;
 	int type;
 	union {
 		Button button;
@@ -23,12 +24,31 @@ typedef struct ElementList {
 	struct ElementList *next;
 }  ElementList;
 
+static int counter = 0;
+
+void Element_ResizeReposition(Element *, Vector2, Vector2);
+
 void ElementList_Add(ElementList **, Element *);
+int ElementList_TotalHeightTill(ElementList *, int);
 void ElementList_Resize(ElementList **, Vector2);
 void ElementList_Draw(ElementList *);
 
+void Element_ResizeReposition(Element *element, Vector2 pos, Vector2 size) {
+	switch (element->type) {
+	case BUTTON:
+		element->button.pos = pos;
+		element->button.width = size.x;
+		break;
+    default:
+		fprintf(stderr, "Error: invalid ElementType(%d) in "
+				"Function(%s)\n", element->type, __func__);
+		exit(1);
+	}
+}
+
 void ElementList_Add(ElementList **list, Element *node) {
 	ElementList *listNode = (ElementList *)malloc(sizeof(ElementList));
+	node->id = counter++;
 	listNode->element = node;
 	if (*list == NULL) {
 		*list = listNode;
@@ -38,6 +58,26 @@ void ElementList_Add(ElementList **list, Element *node) {
 	while (itr->next) itr = itr->next;
 	itr->next = listNode;
 }
+
+int ElementList_TotalHeightTill(ElementList *list, int id) {
+	ElementList *itr = list;
+	int height = 0, _counter = 0;
+	while (itr && _counter != id) {
+		Element element = *itr->element;
+		switch (element.type) {
+		case BUTTON:
+			height += Button_Size(element.button).y;
+			break;
+		default:
+			fprintf(stderr, "Error: invalid ElementType(%d) in "
+					"Function(%s)\n", element.type, __func__);
+			exit(1);
+		}
+		itr = itr->next;
+		_counter++;
+	}
+	return height;
+} 
 
 void ElementList_Draw(ElementList *list) {
 	ElementList *itr = list;
@@ -49,7 +89,7 @@ void ElementList_Draw(ElementList *list) {
 			break;
 		default:
 			fprintf(stderr, "Error: invalid ElementType(%d) in "
-					"Function(ElementList_Draw)\n", element.type);
+					"Function(%s)\n", element.type, __func__);
 			exit(1);
 		}
 		itr = itr->next;

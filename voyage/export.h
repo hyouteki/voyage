@@ -4,5 +4,6 @@
 #include "sidebar.h"
 #include "button.h"
 #include "elements.h"
+#include "helper.h"
 
 #endif // VOYAGE_EXPORT_H_
