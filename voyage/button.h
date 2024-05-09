@@ -32,7 +32,6 @@ typedef struct Button {
 							   .hOffset=10, .vOffset=10})
 #define ButtonDefaultOnClick() (printf("Log: Button(%s) clicked\n", button.text))
 
-// TODO: omiting onClick action for now  
 Button Button_Init(Vector2, int, char *, void (*onClick)());
 void Button_SetOptions(Button *, ButtonOptions);
 void Button_Resize(Button *, int);

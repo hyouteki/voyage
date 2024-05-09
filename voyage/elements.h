@@ -6,16 +6,17 @@
 #include "../raylib/include/raylib.h"
 #include "sidebar.h"
 #include "button.h"
+#include "image.h"
 
 #define BUTTON 0
-#define LABEL 1
+#define IMAGE_CONTAINER 1
 
 typedef struct Element {
 	int id;
 	int type;
 	union {
 		Button button;
-		int label; // placeholder for now
+		ImageContainer imageContainer;
 	};
 } Element;
 
@@ -38,6 +39,9 @@ void Element_ResizeReposition(Element *element, Vector2 pos, Vector2 size) {
 	case BUTTON:
 		element->button.pos = pos;
 		element->button.width = size.x;
+		break;
+	case IMAGE_CONTAINER:
+		ImageContainer_ResizeReposition(&element->imageContainer, pos, size);
 		break;
     default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
@@ -68,6 +72,9 @@ int ElementList_TotalHeightTill(ElementList *list, int padding, int id) {
 		case BUTTON:
 			height += Button_Size(element.button).y;
 			break;
+		case IMAGE_CONTAINER:
+			height += element.imageContainer.size.y;
+			break;
 		default:
 			fprintf(stderr, "Error: invalid ElementType(%d) in "
 					"Function(%s)\n", element.type, __func__);
@@ -87,6 +94,9 @@ void ElementList_Draw(ElementList *list) {
 		switch (element.type) {
 		case BUTTON:
 			Button_Draw(element.button);
+			break;
+		case IMAGE_CONTAINER:
+			ImageContainer_Draw(element.imageContainer);
 			break;
 		default:
 			fprintf(stderr, "Error: invalid ElementType(%d) in "

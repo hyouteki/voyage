@@ -10,7 +10,9 @@ int main() {
 	SetTargetFPS(60);
 	
 	int width = GetScreenWidth(), height = GetScreenHeight();
-	Sidebar sidebar = Sidebar_Init((Vector2){width, height}, Voyage_LightBlue);
+	Sidebar sidebar = Sidebar_Init((Vector2){width, height}, Voyage_Brown);
+	Image image = LoadImage("./images/logo.png");
+	Sidebar_AddElement(&sidebar, &ImageContainer_EleInit(Vector2Dummy, (Vector2){100, 100}, &image));
 	Sidebar_AddElement(&sidebar, &Button_EleInit(Vector2Dummy, 0, "Menu button 1", &buttonOnClick));	
 	Sidebar_AddElement(&sidebar, &Button_EleInit(Vector2Dummy, 0, "Menu button 2", NULL));
 	
@@ -19,8 +21,8 @@ int main() {
 		Sidebar_Resize(&sidebar, (Vector2){width, height});
 		
 		BeginDrawing();
+		ClearBackground(Voyage_DarkBrown);
 		Sidebar_Draw(sidebar);
-		ClearBackground(Voyage_Blue);
 		EndDrawing();
 	}
 	CloseWindow();

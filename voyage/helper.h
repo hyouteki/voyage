@@ -9,5 +9,8 @@
 #define Vector2Dummy ((Vector2){0, 0})
 #define Button_EleInit(...) ((Element){.type=BUTTON, \
 									   .button=Button_Init(__VA_ARGS__)})
+#define ImageContainer_EleInit(...) ((Element){.type=IMAGE_CONTAINER, \
+									   .imageContainer=ImageContainer_Init(__VA_ARGS__)})
+
 
 #endif // VOYAGE_HELPER_H_

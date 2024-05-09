@@ -8,5 +8,6 @@
 #include "elements.h"
 #include "helper.h"
 #include "colors.h"
+#include "image.h"
 
 #endif // VOYAGE_EXPORT_H_

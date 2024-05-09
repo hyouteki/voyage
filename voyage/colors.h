@@ -11,5 +11,7 @@
 #define Voyage_DarkAqua (Color){198, 210, 198, 255}
 #define Voyage_LightBlue (Color){185, 214, 232, 255}
 #define Voyage_Blue (Color){93, 156, 189, 255}
+#define Voyage_Brown (Color){117, 113, 94, 255}
+#define Voyage_DarkBrown (Color){39, 40, 34, 255}
 
 #endif // VOYAGE_COLORS_H_
