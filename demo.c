@@ -12,7 +12,7 @@ int main() {
 	int width = GetScreenWidth(), height = GetScreenHeight();
 	Sidebar sidebar = Sidebar_Init((Vector2){width, height}, Voyage_Brown);
 	Image image = LoadImage("./images/logo.png");
-	Sidebar_AddElement(&sidebar, &ImageContainer_EleInit(Vector2Dummy, (Vector2){100, 100}, &image));
+	Sidebar_AddElement(&sidebar, &ImageContainer_EleInit(Vector2Dummy, Vector2Dummy, &image));
 	Sidebar_AddElement(&sidebar, &Button_EleInit(Vector2Dummy, 0, "Menu button 1", &buttonOnClick));	
 	Sidebar_AddElement(&sidebar, &Button_EleInit(Vector2Dummy, 0, "Menu button 2", NULL));
 	
