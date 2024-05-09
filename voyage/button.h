@@ -5,17 +5,16 @@
 #include "../raylib/include/raylib.h"
 #include "colors.h"
 
-#define Button_Font GetFontDefault()
-#define Button_FontSize 24
-#define Button_TextSpacing 3
-#define Button_HOffset 10
-#define Button_VOffset 10
-
 typedef struct ButtonOptions {
 	int centerText;
 	Color bgColor;
 	Color fgColor;
 	Color border;
+	Font font;
+	int fontSize;
+	int textSpacing;
+	int hOffset;
+	int vOffset;
 } ButtonOptions;
 
 typedef struct Button {
@@ -25,10 +24,12 @@ typedef struct Button {
 	ButtonOptions options;
 	void (*onClick)();
 } Button;
-
-#define ButtonDefaultOptions ((ButtonOptions) \
-		{.centerText=1, .bgColor=Voyage_LightGrey, .fgColor=Voyage_DarkGrey, \
-		 .border=Voyage_DarkGrey})
+ 
+#define ButtonDefaultOptions ((ButtonOptions)							\
+							  {.centerText=1, .bgColor=Voyage_LightGrey, \
+							   .fgColor=Voyage_DarkGrey, .border=Voyage_DarkGrey, \
+							   .font=GetFontDefault(), .fontSize=24, .textSpacing=3, \
+							   .hOffset=10, .vOffset=10})
 #define ButtonDefaultOnClick() (printf("Log: Button(%s) clicked\n", button.text))
 
 // TODO: omiting onClick action for now  
@@ -52,21 +53,21 @@ void Button_Resize(Button *button, int width) {
 }
 
 Vector2 Button_Size(Button button) {
-	Vector2 textSize = MeasureTextEx(Button_Font, button.text,
-									 Button_FontSize, Button_TextSpacing);
-	return (Vector2){button.width, textSize.y+2*Button_VOffset};
+	Vector2 textSize = MeasureTextEx(button.options.font, button.text,
+									 button.options.fontSize, button.options.textSpacing);
+	return (Vector2){button.width, textSize.y+2*button.options.vOffset};
 }
 
 void Button_Draw(Button button) {
-	Vector2 textSize = MeasureTextEx(Button_Font, button.text,
-									 Button_FontSize, Button_TextSpacing);
-	Vector2 textPos = (Vector2){button.pos.x+Button_HOffset,
-								button.pos.y+Button_VOffset};
+	Vector2 textSize = MeasureTextEx(button.options.font, button.text,
+									 button.options.fontSize, button.options.textSpacing);
+	Vector2 textPos = (Vector2){button.pos.x+button.options.hOffset,
+								button.pos.y+button.options.vOffset};
 	if (button.options.centerText) {
 		textPos.x = button.pos.x+(button.width-textSize.x)/2;
 	}
 	Rectangle container = (Rectangle){button.pos.x, button.pos.y,
-									  button.width, textSize.y+2*Button_VOffset};
+									  button.width, textSize.y+2*button.options.vOffset};
 	Vector2 mousePoint = GetMousePosition();
 	int state = 0, action = 0;
 	if (CheckCollisionPointRec(mousePoint, container)) {
@@ -83,8 +84,8 @@ void Button_Draw(Button button) {
 	}
 	DrawRectangleRec(container, bgColor);
 	DrawRectangleLinesEx(container, 5, border); 
-	DrawTextEx(Button_Font, button.text, textPos, Button_FontSize,
-			   Button_TextSpacing, fgColor);
+	DrawTextEx(button.options.font, button.text, textPos, button.options.fontSize,
+			   button.options.textSpacing, fgColor);
 	if (action) {
 		if (!button.onClick) ButtonDefaultOnClick();
 		else button.onClick();
