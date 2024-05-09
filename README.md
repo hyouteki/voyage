@@ -33,3 +33,7 @@ int main() {
 	return 0;
 }
 ```
+
+## Quick Start
+- Build and install [Raylib](https://github.com/raysan5/raylib?tab=readme-ov-file#build-and-installation).
+- Run the demo using `make`.
