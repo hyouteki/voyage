@@ -6,4 +6,4 @@ build: demo.c
 	./demo
 
 clean:
-	$(RM) demo.exe
+	$(RM) *.exe

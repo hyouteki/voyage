@@ -1,7 +1,8 @@
-#include <stdio.h>
-#include <math.h>
-#include "raylib/include/raylib.h"
 #include "voyage/export.h"
+
+void buttonOnClick() {
+	printf("Menu button clicked\n");
+}
 
 int main() {
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -10,8 +11,8 @@ int main() {
 	
 	int width = GetScreenWidth(), height = GetScreenHeight();
 	Sidebar sidebar = Sidebar_Init((Vector2){width, height}, Voyage_LightBlue);
-	Sidebar_AddElement(&sidebar, &Button_EleInit(Vector2Dummy, 0, "Menu button 1"));	
-	Sidebar_AddElement(&sidebar, &Button_EleInit(Vector2Dummy, 0, "Menu button 2"));
+	Sidebar_AddElement(&sidebar, &Button_EleInit(Vector2Dummy, 0, "Menu button 1", &buttonOnClick));	
+	Sidebar_AddElement(&sidebar, &Button_EleInit(Vector2Dummy, 0, "Menu button 2", NULL));
 	
 	while (!WindowShouldClose()) {
 		width = GetScreenWidth(), height = GetScreenHeight();

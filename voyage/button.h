@@ -23,23 +23,24 @@ typedef struct Button {
 	int width;
 	char *text;
 	ButtonOptions options;
-	int (*onClick)();
+	void (*onClick)();
 } Button;
 
 #define ButtonDefaultOptions ((ButtonOptions) \
 		{.centerText=1, .bgColor=Voyage_LightGrey, .fgColor=Voyage_DarkGrey, \
 		 .border=Voyage_DarkGrey})
+#define ButtonDefaultOnClick() (printf("Log: Button(%s) clicked\n", button.text))
 
 // TODO: omiting onClick action for now  
-Button Button_Init(Vector2, int, char *);
+Button Button_Init(Vector2, int, char *, void (*onClick)());
 void Button_SetOptions(Button *, ButtonOptions);
 void Button_Resize(Button *, int);
 Vector2 Button_Size(Button);
 void Button_Draw(Button);
 
-Button Button_Init(Vector2 pos, int width, char *text) {
+Button Button_Init(Vector2 pos, int width, char *text, void (*onClick)()) {
 	return (Button){.pos = pos, .width=width, .text=text,
-					.options=ButtonDefaultOptions};
+					.options=ButtonDefaultOptions, .onClick = onClick};
 }
 
 void Button_SetOptions(Button *button, ButtonOptions options) {
@@ -66,10 +67,28 @@ void Button_Draw(Button button) {
 	}
 	Rectangle container = (Rectangle){button.pos.x, button.pos.y,
 									  button.width, textSize.y+2*Button_VOffset};
-	DrawRectangleRec(container, button.options.bgColor);
-	DrawRectangleLinesEx(container, 5, button.options.border); 
+	Vector2 mousePoint = GetMousePosition();
+	int state = 0, action = 0;
+	if (CheckCollisionPointRec(mousePoint, container)) {
+		state = (IsMouseButtonDown(MOUSE_BUTTON_LEFT))? 2: 1; // PRESSED: HOVER
+		if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) action = 1; // CLICK
+	}
+	else state = 0; // NORMAL
+	Color bgColor = button.options.bgColor, fgColor = button.options.fgColor;
+	Color border = button.options.border;
+	if (state) {
+		bgColor = button.options.fgColor;
+		fgColor = button.options.bgColor;
+		border = button.options.bgColor;
+	}
+	DrawRectangleRec(container, bgColor);
+	DrawRectangleLinesEx(container, 5, border); 
 	DrawTextEx(Button_Font, button.text, textPos, Button_FontSize,
-			   Button_TextSpacing, button.options.fgColor);
+			   Button_TextSpacing, fgColor);
+	if (action) {
+		if (!button.onClick) ButtonDefaultOnClick();
+		else button.onClick();
+	}
 }
 
 #endif // VOYAGE_BUTTON_H_
