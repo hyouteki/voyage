@@ -29,7 +29,7 @@ static int counter = 0;
 void Element_ResizeReposition(Element *, Vector2, Vector2);
 
 void ElementList_Add(ElementList **, Element *);
-int ElementList_TotalHeightTill(ElementList *, int);
+int ElementList_TotalHeightTill(ElementList *, int, int);
 void ElementList_Resize(ElementList **, Vector2);
 void ElementList_Draw(ElementList *);
 
@@ -59,9 +59,9 @@ void ElementList_Add(ElementList **list, Element *node) {
 	itr->next = listNode;
 }
 
-int ElementList_TotalHeightTill(ElementList *list, int id) {
+int ElementList_TotalHeightTill(ElementList *list, int padding, int id) {
 	ElementList *itr = list;
-	int height = 0, _counter = 0;
+	int height = padding, _counter = 0;
 	while (itr && _counter != id) {
 		Element element = *itr->element;
 		switch (element.type) {
@@ -75,6 +75,7 @@ int ElementList_TotalHeightTill(ElementList *list, int id) {
 		}
 		itr = itr->next;
 		_counter++;
+		height += padding;
 	}
 	return height;
 } 
