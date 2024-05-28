@@ -1,9 +1,9 @@
 > Simple GUI application framework made on top of Raylib.
 
-![Logo](./images/logo.png)
+<image src="./images/logo.png" width="1000">
 
 ## Demo
-![Demo](./images/demo1.png)
+<image src="./images/demo1.png" width="1000">
 
 ``` c
 #include "voyage/export.h"
