@@ -11,7 +11,7 @@ typedef struct SidebarOptions {
 	int vPadding;
 } SidebarOptions;
 
-#define SidebarDefaultOptions ((SidebarOptions){.widthFactor=0.25, .hPadding=10, .vPadding=10})
+#define SidebarDefaultOptions ((SidebarOptions){.widthFactor=0.25, .hPadding=5, .vPadding=5})
 
 typedef struct Sidebar {
 	Vector2 size;

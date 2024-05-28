@@ -27,7 +27,7 @@ typedef struct Button {
  
 #define ButtonDefaultOptions ((ButtonOptions)							\
 							  {.centerText=1, .bgColor=Voyage_LightGrey, \
-							   .fgColor=Voyage_DarkGrey, .border=Voyage_DarkGrey, \
+							   .fgColor=Voyage_White, .border=Voyage_DarkGrey, \
 							   .font=GetFontDefault(), .fontSize=24, .textSpacing=3, \
 							   .hOffset=10, .vOffset=10})
 #define ButtonDefaultOnClick() (printf("Log: Button(%s) clicked\n", button.text))
@@ -82,7 +82,7 @@ void Button_Draw(Button button) {
 		border = button.options.bgColor;
 	}
 	DrawRectangleRec(container, bgColor);
-	DrawRectangleLinesEx(container, 5, border); 
+	DrawRectangleLinesEx(container, 2, border); 
 	DrawTextEx(button.options.font, button.text, textPos, button.options.fontSize,
 			   button.options.textSpacing, fgColor);
 	if (action) {

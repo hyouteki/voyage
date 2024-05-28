@@ -7,9 +7,11 @@
 #include "sidebar.h"
 #include "button.h"
 #include "image.h"
+#include "label.h"
 
 #define BUTTON 0
 #define IMAGE_CONTAINER 1
+#define LABEL 2
 
 typedef struct Element {
 	int id;
@@ -17,18 +19,18 @@ typedef struct Element {
 	union {
 		Button button;
 		ImageContainer imageContainer;
+		Label label;
 	};
 } Element;
 
 typedef struct ElementList {
 	Element *element;
 	struct ElementList *next;
-}  ElementList;
+} ElementList;
 
 static int counter = 0;
 
 void Element_ResizeReposition(Element *, Vector2, Vector2);
-
 void ElementList_Add(ElementList **, Element *);
 int ElementList_TotalHeightTill(ElementList *, int, int);
 void ElementList_Resize(ElementList **, Vector2);
@@ -42,6 +44,9 @@ void Element_ResizeReposition(Element *element, Vector2 pos, Vector2 size) {
 		break;
 	case IMAGE_CONTAINER:
 		ImageContainer_ResizeReposition(&element->imageContainer, pos, size);
+		break;
+	case LABEL:
+		Label_ResizeReposition(&element->label, pos, size.x);
 		break;
     default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
@@ -75,6 +80,9 @@ int ElementList_TotalHeightTill(ElementList *list, int padding, int id) {
 		case IMAGE_CONTAINER:
 			height += element.imageContainer.size.y;
 			break;
+		case LABEL:
+			height += Label_Size(element.label).y;
+			break;
 		default:
 			fprintf(stderr, "Error: invalid ElementType(%d) in "
 					"Function(%s)\n", element.type, __func__);
@@ -97,6 +105,9 @@ void ElementList_Draw(ElementList *list) {
 			break;
 		case IMAGE_CONTAINER:
 			ImageContainer_Draw(element.imageContainer);
+			break;
+		case LABEL:
+			Label_Draw(element.label);
 			break;
 		default:
 			fprintf(stderr, "Error: invalid ElementType(%d) in "
