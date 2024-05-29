@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../raylib/include/raylib.h"
-#include "sidebar.h"
 #include "button.h"
 #include "image.h"
 #include "label.h"
@@ -31,6 +30,8 @@ typedef struct ElementList {
 static int counter = 0;
 
 void Element_ResizeReposition(Element *, Vector2, Vector2);
+Vector2 Element_Size(Element);
+
 void ElementList_Add(ElementList **, Element *);
 int ElementList_TotalHeightTill(ElementList *, int, int);
 void ElementList_Resize(ElementList **, Vector2);
@@ -48,9 +49,21 @@ void Element_ResizeReposition(Element *element, Vector2 pos, Vector2 size) {
 	case LABEL:
 		Label_ResizeReposition(&element->label, pos, size.x);
 		break;
-    default:
+	default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
 				"Function(%s)\n", element->type, __func__);
+		exit(1);
+	}
+}
+
+Vector2 Element_Size(Element element) {
+	switch (element.type) {
+	case BUTTON: return Button_Size(element.button);
+	case IMAGE_CONTAINER: return element.imageContainer.size;
+	case LABEL: return Label_Size(element.label);
+	default:
+		fprintf(stderr, "Error: invalid ElementType(%d) in "
+				"Function(%s)\n", element.type, __func__);
 		exit(1);
 	}
 }
@@ -72,25 +85,9 @@ int ElementList_TotalHeightTill(ElementList *list, int padding, int id) {
 	ElementList *itr = list;
 	int height = padding, _counter = 0;
 	while (itr && _counter != id) {
-		Element element = *itr->element;
-		switch (element.type) {
-		case BUTTON:
-			height += Button_Size(element.button).y;
-			break;
-		case IMAGE_CONTAINER:
-			height += element.imageContainer.size.y;
-			break;
-		case LABEL:
-			height += Label_Size(element.label).y;
-			break;
-		default:
-			fprintf(stderr, "Error: invalid ElementType(%d) in "
-					"Function(%s)\n", element.type, __func__);
-			exit(1);
-		}
+		height += Element_Size(*itr->element).y+padding;
 		itr = itr->next;
 		_counter++;
-		height += padding;
 	}
 	return height;
 } 

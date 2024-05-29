@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include "raylib/include/raylib.h"
-#include "voyage/sidebar.h"
+#include "voyage/column.h"
 #include "voyage/button.h"
 #include "voyage/elements.h"
 #include "voyage/helper.h"

@@ -9,7 +9,6 @@
 #include "helper.h"
 
 typedef struct LabelOptions {
-    int wordWrap;
     Color bgColor;
     Color fgColor;
     Font font;
@@ -35,10 +34,9 @@ typedef struct Label {
 } Label;
 
 #define LabelDefaultOptions ((LabelOptions)								\
-                             {.wordWrap=1, .bgColor=Voyage_LightGrey,	\
-                              .fgColor=Voyage_White, .font=GetFontDefault(), \
-                              .fontSize=24, .textSpacing=3, .textSpacingV=5, \
-							  .hOffset=10, .vOffset=10, .maxWidth=200})
+                             {.bgColor=Voyage_LightGrey, .fgColor=Voyage_White, \
+							  .font=GetFontDefault(), .fontSize=24, .textSpacing=3, \
+							  .textSpacingV=5, .hOffset=10, .vOffset=10, .maxWidth=200})
 
 static void VecStr_Add(VecStr **, char *);
 static void Vecstr_Free(VecStr *);
@@ -114,7 +112,7 @@ void Label_WrapText(const char* text, LabelOptions labelOptions,
 	if (!line) Voyage_Error("unable to allocate memory for line");
 	line[0] = 0;
     int len = strlen(text), wordIndex = 0, lineIndex = 0;
-	int maxWidth = width;
+	int maxWidth = width - 2*labelOptions.hOffset;
 	for (int i = 0; i <= len; i++) {
         if (text[i] == ' ' || text[i] == 0) {
             word[wordIndex] = 0;
@@ -136,13 +134,14 @@ void Label_WrapText(const char* text, LabelOptions labelOptions,
 
 void Label_Draw(Label label) {
 	VecStr *itr = label.vecstr;
-	int y = label.pos.y;
+	int x = label.pos.x+label.options.hOffset, y = label.pos.y;
 	while (itr) {
+		y += label.options.textSpacingV;
 		Vector2 textSize = MeasureTextEx(label.options.font, itr->str,
 										 label.options.fontSize, label.options.textSpacing);
-		DrawTextEx(label.options.font, itr->str, (Vector2){label.pos.x, y},
+		DrawTextEx(label.options.font, itr->str, (Vector2){x, y},
 				   label.options.fontSize, label.options.textSpacing, label.options.fgColor);
-		y += textSize.y + label.options.textSpacingV;
+		y += textSize.y;
 		itr = itr->next;
 	}
 }
