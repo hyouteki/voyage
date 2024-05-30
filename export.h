@@ -10,5 +10,6 @@
 #include "voyage/colors.h"
 #include "voyage/image.h"
 #include "voyage/label.h"
+#include "voyage/row.h"
 
 #endif // VOYAGE_EXPORT_H_

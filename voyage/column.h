@@ -26,6 +26,7 @@ typedef struct Column {
 Column Column_Init(Vector2, Vector2, Color);
 void Column_AddElement(Column *, Element *);
 void Column_Resize(Column *, Vector2);
+void Column_ResizeReposition(Column *, Vector2, Vector2);
 void Column_Draw(Column);
 
 Column Column_Init(Vector2 pos, Vector2 size, Color color) {
@@ -51,6 +52,11 @@ void Column_Resize(Column *column, Vector2 size) {
 		itr = itr->next;
 		_counter++;
 	}
+}
+
+void Column_ResizeReposition(Column *column, Vector2 pos, Vector2 size) {
+	column->pos = pos;
+	Column_Resize(column, size);
 }
 
 void Column_Draw(Column column) {

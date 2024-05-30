@@ -27,8 +27,9 @@ typedef struct ElementList {
 	struct ElementList *next;
 } ElementList;
 
-static int counter = 0;
+static int Element_Counter = 0;
 
+void Element_Reposition(Element *, Vector2);
 void Element_ResizeReposition(Element *, Vector2, Vector2);
 Vector2 Element_Size(Element);
 
@@ -36,6 +37,24 @@ void ElementList_Add(ElementList **, Element *);
 int ElementList_TotalHeightTill(ElementList *, int, int);
 void ElementList_Resize(ElementList **, Vector2);
 void ElementList_Draw(ElementList *);
+
+void Element_Reposition(Element *element, Vector2 pos) {
+	switch (element->type) {
+	case BUTTON:
+		element->button.pos = pos;
+		break;
+	case IMAGE_CONTAINER:
+		element->imageContainer.pos = pos;
+		break;
+	case LABEL:
+		element->label.pos = pos;
+		break;
+	default:
+		fprintf(stderr, "Error: invalid ElementType(%d) in "
+				"Function(%s)\n", element->type, __func__);
+		exit(1);
+	}
+}
 
 void Element_ResizeReposition(Element *element, Vector2 pos, Vector2 size) {
 	switch (element->type) {
@@ -70,7 +89,7 @@ Vector2 Element_Size(Element element) {
 
 void ElementList_Add(ElementList **list, Element *node) {
 	ElementList *listNode = (ElementList *)malloc(sizeof(ElementList));
-	node->id = counter++;
+	node->id = Element_Counter++;
 	listNode->element = node;
 	if (*list == NULL) {
 		*list = listNode;
@@ -83,11 +102,11 @@ void ElementList_Add(ElementList **list, Element *node) {
 
 int ElementList_TotalHeightTill(ElementList *list, int padding, int id) {
 	ElementList *itr = list;
-	int height = padding, _counter = 0;
-	while (itr && _counter != id) {
+	int height = padding, _Element_Counter = 0;
+	while (itr && _Element_Counter != id) {
 		height += Element_Size(*itr->element).y+padding;
 		itr = itr->next;
-		_counter++;
+		_Element_Counter++;
 	}
 	return height;
 } 
