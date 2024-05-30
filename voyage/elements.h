@@ -8,13 +8,15 @@
 #include "image.h"
 #include "label.h"
 
-#define BUTTON 0
-#define IMAGE_CONTAINER 1
-#define LABEL 2
+typedef enum {
+	BUTTON,
+	IMAGE_CONTAINER,
+	LABEL
+} Element_Type;
 
 typedef struct Element {
 	int id;
-	int type;
+	Element_Type type;
 	union {
 		Button button;
 		ImageContainer imageContainer;
@@ -34,6 +36,7 @@ void Element_ResizeReposition(Element *, Vector2, Vector2);
 Vector2 Element_Size(Element);
 
 void ElementList_Add(ElementList **, Element *);
+void ElementList_Free(ElementList *);
 int ElementList_TotalHeightTill(ElementList *, int, int);
 void ElementList_Resize(ElementList **, Vector2);
 void ElementList_Draw(ElementList *);
@@ -90,6 +93,7 @@ Vector2 Element_Size(Element element) {
 void ElementList_Add(ElementList **list, Element *node) {
 	ElementList *listNode = (ElementList *)malloc(sizeof(ElementList));
 	node->id = Element_Counter++;
+	listNode->next = NULL;
 	listNode->element = node;
 	if (*list == NULL) {
 		*list = listNode;
@@ -98,6 +102,14 @@ void ElementList_Add(ElementList **list, Element *node) {
 	ElementList *itr = *list;
 	while (itr->next) itr = itr->next;
 	itr->next = listNode;
+}
+
+void ElementList_Free(ElementList *elementList) {
+	while (elementList) {
+		ElementList *next = elementList->next;
+		free(elementList);
+		elementList = next;
+	}
 }
 
 int ElementList_TotalHeightTill(ElementList *list, int padding, int id) {

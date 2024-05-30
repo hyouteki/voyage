@@ -24,6 +24,7 @@ typedef struct Column {
 #define Column_SetOptions(column, columnOptions) (column->options = columnOptions)
 
 Column Column_Init(Vector2, Vector2, Color);
+void Column_Free(Column *);
 void Column_AddElement(Column *, Element *);
 void Column_Resize(Column *, Vector2);
 void Column_ResizeReposition(Column *, Vector2, Vector2);
@@ -31,6 +32,10 @@ void Column_Draw(Column);
 
 Column Column_Init(Vector2 pos, Vector2 size, Color color) {
 	return (Column){.pos=pos, .size=size, .color=color, .elements=NULL, .options=ColumnDefaultOptions};
+}
+
+void Column_Free(Column *column) {
+	ElementList_Free(column->elements);
 }
 
 void Column_AddElement(Column *column, Element *element) {

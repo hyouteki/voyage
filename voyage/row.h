@@ -33,6 +33,7 @@ static u32 Column_Counter = 0;
 static void ColumnList_Add(ColumnList **, Column *, u32);
 
 Row Row_Init(Vector2, Vector2, int, Column *[], u32[]);
+void Row_Free(Row *);
 void Row_AddColumn(Row *, Column *, u32);
 void Row_Resize(Row *, Vector2);
 void Row_Draw(Row);
@@ -56,6 +57,16 @@ Row Row_Init(Vector2 pos, Vector2 size, int len, Column *columns[len], u32 weigh
 	ColumnList *columnList = NULL;
 	for (int i = 0; i < len; ++i) ColumnList_Add(&columnList, columns[i], weights[i]);
 	return (Row){.pos=pos, .size=size, .columns=columnList, .options=RowDefaultOptions};
+}
+
+void Row_Free(Row *row) {
+	ColumnList *columnList = row->columns;
+	while (columnList) {
+		ColumnList *next = columnList->next;
+		Column_Free(columnList->column);
+		free(columnList);
+		columnList = next;
+	}
 }
 
 void Row_AddColumn(Row *row, Column *column, u32 weight) {

@@ -17,7 +17,6 @@ typedef struct LabelOptions {
 	int textSpacingV;
     int hOffset;
     int vOffset;
-    int maxWidth;
 } LabelOptions;
 
 typedef struct VecStr {
@@ -36,13 +35,14 @@ typedef struct Label {
 #define LabelDefaultOptions ((LabelOptions)								\
                              {.bgColor=Voyage_LightGrey, .fgColor=Voyage_White, \
 							  .font=GetFontDefault(), .fontSize=24, .textSpacing=3, \
-							  .textSpacingV=5, .hOffset=10, .vOffset=10, .maxWidth=200})
+							  .textSpacingV=5, .hOffset=10, .vOffset=10})
 
 static void VecStr_Add(VecStr **, char *);
 static void Vecstr_Free(VecStr *);
 static void Label_WrapText(const char *, LabelOptions, int, VecStr **);
 
 Label Label_Init(Vector2, int, char *);
+Label Label_InitC(Vector2, int, char *, LabelOptions);
 void Label_ResizeReposition(Label *, Vector2, int);
 Vector2 Label_Size(Label);
 void Label_SetOptions(Label *, LabelOptions);
@@ -78,6 +78,12 @@ Label Label_Init(Vector2 pos, int width, char *text) {
     return (Label){.pos = pos, .width=width, .text=text,
 				   .vecstr = vecstr, .options = LabelDefaultOptions};
 }
+
+Label Label_InitC(Vector2 pos, int width, char *text, LabelOptions options) {
+	VecStr *vecstr = NULL;
+	Label_WrapText(text, LabelDefaultOptions, width, &vecstr);
+    return (Label){.pos = pos, .width=width, .text=text, .vecstr = vecstr, .options = options};
+} 
 
 void Label_ResizeReposition(Label *label, Vector2 pos, int width) {
 	label->pos = pos;
