@@ -27,6 +27,7 @@ Column Column_Init(Vector2, Vector2, Color);
 void Column_Free(Column *);
 void Column_AddElement(Column *, Element *);
 void Column_Resize(Column *, Vector2);
+void Column_Reposition(Column *, Vector2);
 void Column_ResizeReposition(Column *, Vector2, Vector2);
 void Column_Draw(Column);
 
@@ -54,6 +55,19 @@ void Column_Resize(Column *column, Vector2 size) {
 		Element_ResizeReposition(itr->element, (Vector2){column->pos.x+column->options.hPadding,
 														 column->pos.y+height},
 								 (Vector2){column->size.x-2*column->options.hPadding, -1});
+		itr = itr->next;
+		_counter++;
+	}
+}
+
+void Column_Reposition(Column *column, Vector2 pos) {
+	column->pos = pos;
+	ElementList *itr = column->elements;
+	int _counter = 0;
+	while (itr) {
+		int height = ElementList_TotalHeightTill(column->elements, column->options.vPadding, _counter);
+		Element_Reposition(itr->element, (Vector2){column->pos.x+column->options.hPadding,
+												   column->pos.y+height});
 		itr = itr->next;
 		_counter++;
 	}

@@ -15,14 +15,11 @@ void ImageContainer_ResizeReposition(ImageContainer *, Vector2, Vector2);
 void ImageContainer_Draw(ImageContainer);
 
 ImageContainer ImageContainer_Init(Vector2 pos, Vector2 size, Image *image) {
-	if (size.y == -1) {
-		size = (Vector2){size.x, image->height/image->width*size.x};
-	}
+	if (size.y == -1) size = (Vector2){size.x, image->height/image->width*size.x};
 	return (ImageContainer){.pos=pos, .size=size, .image=image};
 }
 
-void ImageContainer_ResizeReposition(ImageContainer *imageContainer,
-									 Vector2 pos, Vector2 size) {
+void ImageContainer_ResizeReposition(ImageContainer *imageContainer, Vector2 pos, Vector2 size) {
 	if (size.y == -1) {
 		Image *image = imageContainer->image;
 		size = (Vector2){size.x, ((double)image->height/image->width)*size.x};
@@ -32,8 +29,7 @@ void ImageContainer_ResizeReposition(ImageContainer *imageContainer,
 }
 
 void ImageContainer_Draw(ImageContainer imageContainer) {
-	ImageResize(imageContainer.image, imageContainer.size.x,
-				imageContainer.size.y);
+	ImageResize(imageContainer.image, imageContainer.size.x, imageContainer.size.y);
 	Texture2D texture = LoadTextureFromImage(*imageContainer.image);
 	DrawTexture(texture, imageContainer.pos.x, imageContainer.pos.y, WHITE);
 }

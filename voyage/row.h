@@ -35,6 +35,7 @@ static void ColumnList_Add(ColumnList **, Column *, u32);
 Row Row_Init(Vector2, Vector2, int, Column *[], u32[]);
 void Row_Free(Row *);
 void Row_AddColumn(Row *, Column *, u32);
+void Row_ScrollEventHandler(Row *, u32);
 void Row_Resize(Row *, Vector2);
 void Row_Draw(Row);
 
@@ -74,7 +75,21 @@ void Row_AddColumn(Row *row, Column *column, u32 weight) {
 	Row_Resize(row, row->size);
 }
 
+void Row_ScrollEventHandler(Row *row, u32 scrollSpeed) {
+	ColumnList *itr = row->columns;
+	Vector2 mousePoint = GetMousePosition();
+	while (itr) {
+		if (Voyage_CheckPointRecCollision(mousePoint, itr->column->pos, itr->column->size)) {
+			int y = itr->column->pos.y + GetMouseWheelMove()*scrollSpeed;
+			Column_Reposition(itr->column, (Vector2){.x=itr->column->pos.x, .y=y});
+			break;
+		}
+		itr = itr->next;
+	}
+}
+
 void Row_Resize(Row *row, Vector2 size) {
+	if (Voyage_Vector2Equal(row->size, size)) return;
 	row->size = size;
 	ColumnList *itr = row->columns;
 	int totalWeight = 0;

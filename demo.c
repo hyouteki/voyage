@@ -18,11 +18,12 @@ int main() {
 	Column canvas = Column_Init(Vector2Dummy, Vector2Dummy, Voyage_DarkBrown);
 	Column_AddElement(&canvas, &Heading_EleInit("Lorem Ipsum"));	
 	Column_AddElement(&canvas, &Label_EleInit(lorem));
-	Row row = Row_Init(Vector2Dummy, Voyage_ScreenDimen, 2,
+	Row row = Row_Init(Vector2Dummy, Vector2Dummy, 2,
 					   (Column *[]){&sidebar, &canvas}, (u32 []){1, 3});
 	
 	while (!WindowShouldClose()) {
-		Row_Resize(&row, Voyage_ScreenDimen);		
+		Row_Resize(&row, Voyage_ScreenDimen);
+		Row_ScrollEventHandler(&row, 2);	
 		BeginDrawing();
 		Row_Draw(row);
 		EndDrawing();
