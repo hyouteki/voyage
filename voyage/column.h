@@ -18,10 +18,13 @@ typedef struct Column {
 	Color color;
 	ElementList *elements;
 	ColumnOptions options;
+	Element *bottom;
 } Column;
 
 #define Column_Size(column) (column.size) 
 #define Column_SetOptions(column, columnOptions) (column->options = columnOptions)
+#define Column_Top(column) ((column->elements == NULL)? NULL: column->elements->element)
+#define Column_Bottom(column) (column->bottom)
 
 Column Column_Init(Vector2, Vector2, Color);
 void Column_Free(Column *);
@@ -32,7 +35,8 @@ void Column_ResizeReposition(Column *, Vector2, Vector2);
 void Column_Draw(Column);
 
 Column Column_Init(Vector2 pos, Vector2 size, Color color) {
-	return (Column){.pos=pos, .size=size, .color=color, .elements=NULL, .options=ColumnDefaultOptions};
+	return (Column){.pos=pos, .size=size, .color=color, .elements=NULL,
+					.options=ColumnDefaultOptions, .bottom=NULL};
 }
 
 void Column_Free(Column *column) {
@@ -44,6 +48,7 @@ void Column_AddElement(Column *column, Element *element) {
 	Element_ResizeReposition(element, (Vector2){column->pos.x+column->options.hPadding, column->pos.y+height},
 							 (Vector2){column->size.x-2*column->options.hPadding, -1});
 	ElementList_Add(&column->elements, element);
+	column->bottom = element;
 }
 
 void Column_Resize(Column *column, Vector2 size) {

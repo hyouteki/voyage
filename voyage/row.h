@@ -81,7 +81,7 @@ void Row_ScrollEventHandler(Row *row) {
 	Vector2 mousePoint = GetMousePosition();
 	while (itr) {
 		if (Voyage_CheckPointRecCollision(mousePoint, itr->column->pos, itr->column->size)) {
-			int y = itr->column->pos.y + Voyage_MouseWheelMove()*row->options.scrollSpeed;
+			int y = itr->column->pos.y + GetMouseWheelMove()*row->options.scrollSpeed;
 			Column_Reposition(itr->column, (Vector2){.x=itr->column->pos.x, .y=y});
 			break;
 		}
