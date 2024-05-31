@@ -3,6 +3,8 @@
 <image src="./images/logo.png" width="1000">
 
 ## Demo
+https://github.com/hyouteki/voyage/assets/108230497/7cec380d-fa85-4ed7-808b-cb2d5e473f27
+
 <image src="./images/demo1.png" width="1000">
 
 ``` c
