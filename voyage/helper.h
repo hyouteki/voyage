@@ -15,6 +15,7 @@
 #define Voyage_ArraySize(array) (sizeof(array)/sizeof(array[0]))
 #define Voyage_ScreenDimen ((Vector2){.x=GetScreenWidth(), .y=GetScreenHeight()})
 #define Voyage_Vector2Equal(vec1, vec2) ((int)vec1.x == (int)vec2.x && (int)vec1.y == (int)vec2.y)
+#define Voyage_MaxInt(n1, n2) (n1 > n2? n1: n2)
 
 typedef unsigned int u32;
 

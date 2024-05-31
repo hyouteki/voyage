@@ -85,7 +85,8 @@ void Column_ResizeReposition(Column *column, Vector2 pos, Vector2 size) {
 
 void Column_Draw(Column column) {
 	int height = ElementList_TotalHeightTill(column.elements, column.options.vPadding, -1);
-	DrawRectangleV(column.pos, (Vector2){.x=column.size.x, .y=height}, column.color);
+	DrawRectangleV(column.pos, (Vector2){.x=column.size.x, .y=Voyage_MaxInt(height, column.size.y)},
+				   column.color);
 	ElementList_Draw(column.elements);
 }
 
