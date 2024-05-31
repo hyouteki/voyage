@@ -79,7 +79,8 @@ void Column_ResizeReposition(Column *column, Vector2 pos, Vector2 size) {
 }
 
 void Column_Draw(Column column) {
-	DrawRectangleV(column.pos, column.size, column.color);
+	int height = ElementList_TotalHeightTill(column.elements, column.options.vPadding, -1);
+	DrawRectangleV(column.pos, (Vector2){.x=column.size.x, .y=height}, column.color);
 	ElementList_Draw(column.elements);
 }
 

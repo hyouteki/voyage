@@ -13,7 +13,7 @@ typedef struct RowOptions {
 	u32 scrollSpeed;
 } RowOptions;
 
-#define RowDefaultOptions ((RowOptions){.hPadding=0, .vPadding=0, .scrollSpeed=2})
+#define RowDefaultOptions ((RowOptions){.hPadding=0, .vPadding=0, .scrollSpeed=5})
 
 typedef struct ColumnList {
 	u32 id;

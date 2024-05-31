@@ -20,6 +20,7 @@ int main() {
 	Column_AddElement(&canvas, &Heading_EleInit("Lorem Ipsum"));	
 	Column_AddElement(&canvas, &Label_EleInit(lorem));
 	Column_AddElement(&canvas, &Label_EleInit(lorem));
+	Column_AddElement(&canvas, &Label_EleInit(lorem));
 	Row row = Row_Init(Vector2Dummy, Vector2Dummy, 2,
 					   (Column *[]){&sidebar, &canvas}, (u32 []){1, 3});
 	
@@ -27,6 +28,7 @@ int main() {
 		Row_Resize(&row, Voyage_ScreenDimen);
 		Row_ScrollEventHandler(&row);	
 		BeginDrawing();
+		ClearBackground(BLACK);
 		Row_Draw(row);
 		EndDrawing();
 	}
