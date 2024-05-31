@@ -8,11 +8,12 @@
 #include "helper.h"
 
 typedef struct RowOptions {
-	int hPadding;
-	int vPadding;
+	u32 hPadding;
+	u32 vPadding;
+	u32 scrollSpeed;
 } RowOptions;
 
-#define RowDefaultOptions ((RowOptions){.hPadding=0, .vPadding=0})
+#define RowDefaultOptions ((RowOptions){.hPadding=0, .vPadding=0, .scrollSpeed=2})
 
 typedef struct ColumnList {
 	u32 id;
@@ -32,10 +33,10 @@ static u32 Column_Counter = 0;
 
 static void ColumnList_Add(ColumnList **, Column *, u32);
 
-Row Row_Init(Vector2, Vector2, int, Column *[], u32[]);
+Row Row_Init(Vector2, Vector2, u32, Column *[], u32[]);
 void Row_Free(Row *);
 void Row_AddColumn(Row *, Column *, u32);
-void Row_ScrollEventHandler(Row *, u32);
+void Row_ScrollEventHandler(Row *);
 void Row_Resize(Row *, Vector2);
 void Row_Draw(Row);
 
@@ -53,7 +54,7 @@ static void ColumnList_Add(ColumnList **list, Column *column, u32 weight) {
 	itr->next = listNode;
 }
 
-Row Row_Init(Vector2 pos, Vector2 size, int len, Column *columns[len], u32 weights[len]) {
+Row Row_Init(Vector2 pos, Vector2 size, u32 len, Column *columns[len], u32 weights[len]) {
 	if (len <= 0) Voyage_Error("len(columns) > 0 && len(weights) > 0");
 	ColumnList *columnList = NULL;
 	for (int i = 0; i < len; ++i) ColumnList_Add(&columnList, columns[i], weights[i]);
@@ -75,12 +76,12 @@ void Row_AddColumn(Row *row, Column *column, u32 weight) {
 	Row_Resize(row, row->size);
 }
 
-void Row_ScrollEventHandler(Row *row, u32 scrollSpeed) {
+void Row_ScrollEventHandler(Row *row) {
 	ColumnList *itr = row->columns;
 	Vector2 mousePoint = GetMousePosition();
 	while (itr) {
 		if (Voyage_CheckPointRecCollision(mousePoint, itr->column->pos, itr->column->size)) {
-			int y = itr->column->pos.y + GetMouseWheelMove()*scrollSpeed;
+			int y = itr->column->pos.y + Voyage_MouseWheelMove()*row->options.scrollSpeed;
 			Column_Reposition(itr->column, (Vector2){.x=itr->column->pos.x, .y=y});
 			break;
 		}

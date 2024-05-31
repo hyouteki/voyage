@@ -95,12 +95,10 @@ void Label_ResizeReposition(Label *label, Vector2 pos, int width) {
 
 Vector2 Label_Size(Label label) {
 	VecStr *itr = label.vecstr;
-	int y = label.pos.y;
+	int y = 0;
 	while (itr) {
 		Vector2 textSize = MeasureTextEx(label.options.font, itr->str,
 										 label.options.fontSize, label.options.textSpacing);
-		DrawTextEx(label.options.font, itr->str, (Vector2){label.pos.x, y},
-				   label.options.fontSize, label.options.textSpacing, label.options.fgColor);
 		y += textSize.y + label.options.textSpacingV;
 		itr = itr->next;
 	}
