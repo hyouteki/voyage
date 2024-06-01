@@ -9,9 +9,9 @@
 #include "label.h"
 
 typedef enum {
-	BUTTON,
-	IMAGE_CONTAINER,
-	LABEL
+	Element_Button,
+	Element_ImageContainer,
+	Element_Label
 } Element_Type;
 
 typedef struct Element {
@@ -43,13 +43,13 @@ void ElementList_Draw(ElementList *);
 
 void Element_Reposition(Element *element, Vector2 pos) {
 	switch (element->type) {
-	case BUTTON:
+	case Element_Button:
 		element->button.pos = pos;
 		break;
-	case IMAGE_CONTAINER:
+	case Element_ImageContainer:
 		element->imageContainer.pos = pos;
 		break;
-	case LABEL:
+	case Element_Label:
 		element->label.pos = pos;
 		break;
 	default:
@@ -61,14 +61,14 @@ void Element_Reposition(Element *element, Vector2 pos) {
 
 void Element_ResizeReposition(Element *element, Vector2 pos, Vector2 size) {
 	switch (element->type) {
-	case BUTTON:
+	case Element_Button:
 		element->button.pos = pos;
 		element->button.width = size.x;
 		break;
-	case IMAGE_CONTAINER:
+	case Element_ImageContainer:
 		ImageContainer_ResizeReposition(&element->imageContainer, pos, size);
 		break;
-	case LABEL:
+	case Element_Label:
 		Label_ResizeReposition(&element->label, pos, size.x);
 		break;
 	default:
@@ -80,9 +80,9 @@ void Element_ResizeReposition(Element *element, Vector2 pos, Vector2 size) {
 
 Vector2 Element_Size(Element element) {
 	switch (element.type) {
-	case BUTTON: return Button_Size(element.button);
-	case IMAGE_CONTAINER: return element.imageContainer.size;
-	case LABEL: return Label_Size(element.label);
+	case Element_Button: return Button_Size(element.button);
+	case Element_ImageContainer: return element.imageContainer.size;
+	case Element_Label: return Label_Size(element.label);
 	default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
 				"Function(%s)\n", element.type, __func__);
@@ -94,7 +94,8 @@ void ElementList_Add(ElementList **list, Element *node) {
 	ElementList *listNode = (ElementList *)malloc(sizeof(ElementList));
 	node->id = Element_Counter++;
 	listNode->next = NULL;
-	listNode->element = node;
+	listNode->element = (Element *)malloc(sizeof(Element));
+	memcpy(listNode->element, node, sizeof(Element));
 	if (*list == NULL) {
 		*list = listNode;
 		return;
@@ -107,6 +108,7 @@ void ElementList_Add(ElementList **list, Element *node) {
 void ElementList_Free(ElementList *elementList) {
 	while (elementList) {
 		ElementList *next = elementList->next;
+		free(elementList->element);
 		free(elementList);
 		elementList = next;
 	}
@@ -128,13 +130,13 @@ void ElementList_Draw(ElementList *list) {
 	while (itr) {
 		Element element = *itr->element;
 		switch (element.type) {
-		case BUTTON:
+		case Element_Button:
 			Button_Draw(element.button);
 			break;
-		case IMAGE_CONTAINER:
+		case Element_ImageContainer:
 			ImageContainer_Draw(element.imageContainer);
 			break;
-		case LABEL:
+		case Element_Label:
 			Label_Draw(element.label);
 			break;
 		default:

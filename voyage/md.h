@@ -6,4 +6,4 @@
 						 .textSpacingV=5, .hOffset=10, .vOffset=10})
 
 #define Heading_EleInit(text)								\
-	((Element){.type=LABEL, .label=Label_InitC(Vector2Dummy, 0, text, HeadingOptions)})
+	((Element){.type=Element_Label, .label=Label_InitC(Vector2Dummy, 0, text, HeadingOptions)})

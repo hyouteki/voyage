@@ -6,11 +6,11 @@
 #include "elements.h"
 
 #define Vector2Dummy ((Vector2){0, 0})
-#define Button_EleInit(...) ((Element){.type=BUTTON, .button=Button_Init(Vector2Dummy, 0, __VA_ARGS__)})
-#define ImageContainer_EleInit(...) ((Element){.type=IMAGE_CONTAINER,	\
+#define Button_EleInit(...) ((Element){.type=Element_Button, .button=Button_Init(Vector2Dummy, 0, __VA_ARGS__)})
+#define ImageContainer_EleInit(...) ((Element){.type=Element_ImageContainer, \
 											   .imageContainer=ImageContainer_Init(Vector2Dummy, \
 																				   Vector2Dummy, __VA_ARGS__)})
-#define Label_EleInit(...) ((Element){.type=LABEL, .label=Label_Init(Vector2Dummy, 0, __VA_ARGS__)})
+#define Label_EleInit(...) ((Element){.type=Element_Label, .label=Label_Init(Vector2Dummy, 0, __VA_ARGS__)})
 #define Voyage_Error(message) ({printf("Error: %s\n", message); exit(1);})
 #define Voyage_ArraySize(array) (sizeof(array)/sizeof(array[0]))
 #define Voyage_ScreenDimen ((Vector2){.x=GetScreenWidth(), .y=GetScreenHeight()})
