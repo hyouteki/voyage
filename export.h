@@ -12,5 +12,6 @@
 #include "voyage/label.h"
 #include "voyage/row.h"
 #include "voyage/md.h"
+#include "voyage/quote.h"
 
 #endif // VOYAGE_EXPORT_H_

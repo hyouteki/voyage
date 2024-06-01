@@ -20,7 +20,8 @@ int main() {
 	Column_AddElement(&canvas, &Button_EleInit("Button inside canvas", NULL));	
 	Column_AddElement(&canvas, &Heading_EleInit("Lorem Ipsum"));	
 	Column_AddElement(&canvas, &Label_EleInit(lorem));
-	Column_AddElement(&canvas, &Label_EleInit(lorem));
+	Column_AddElement(&canvas, &Label_EleInit(lorem));	
+	Column_AddElement(&canvas, &Quote_EleInit("This is a quote."));
 	Column_AddElement(&canvas, &Label_EleInit(lorem));
 
 	Row row = Row_Init(Vector2Dummy, Vector2Dummy, 2,

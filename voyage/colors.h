@@ -1,7 +1,6 @@
 #ifndef VOYAGE_COLORS_H_
 #define VOYAGE_COLORS_H_
 
-#include <stdio.h>
 #include "../raylib/include/raylib.h"
 
 #define Voyage_LightGrey (Color){58, 58, 58, 225}
@@ -15,5 +14,6 @@
 #define Voyage_DarkBrown (Color){39, 40, 34, 255}
 #define Voyage_Black (Color){9, 9, 9, 255}
 #define Voyage_LightGreen (Color){166, 226, 46, 255}
+#define Voyage_OffBrown (Color){73, 72, 62, 255}
 
 #endif // VOYAGE_COLORS_H_

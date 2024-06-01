@@ -7,11 +7,13 @@
 #include "button.h"
 #include "image.h"
 #include "label.h"
+#include "quote.h"
 
 typedef enum {
 	Element_Button,
 	Element_ImageContainer,
-	Element_Label
+	Element_Label,
+	Element_Quote
 } Element_Type;
 
 typedef struct Element {
@@ -21,6 +23,7 @@ typedef struct Element {
 		Button button;
 		ImageContainer imageContainer;
 		Label label;
+		Quote quote;
 	};
 } Element;
 
@@ -52,6 +55,9 @@ void Element_Reposition(Element *element, Vector2 pos) {
 	case Element_Label:
 		element->label.pos = pos;
 		break;
+	case Element_Quote:
+		Quote_Reposition(&element->quote, pos);
+		break;
 	default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
 				"Function(%s)\n", element->type, __func__);
@@ -71,6 +77,9 @@ void Element_ResizeReposition(Element *element, Vector2 pos, Vector2 size) {
 	case Element_Label:
 		Label_ResizeReposition(&element->label, pos, size.x);
 		break;
+	case Element_Quote:
+		Quote_ResizeReposition(&element->quote, pos, size.x);
+		break;
 	default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
 				"Function(%s)\n", element->type, __func__);
@@ -83,6 +92,7 @@ Vector2 Element_Size(Element element) {
 	case Element_Button: return Button_Size(element.button);
 	case Element_ImageContainer: return element.imageContainer.size;
 	case Element_Label: return Label_Size(element.label);
+	case Element_Quote: return Quote_Size(element.quote);
 	default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
 				"Function(%s)\n", element.type, __func__);
@@ -138,6 +148,9 @@ void ElementList_Draw(ElementList *list) {
 			break;
 		case Element_Label:
 			Label_Draw(element.label);
+			break;
+		case Element_Quote:
+			Quote_Draw(element.quote);
 			break;
 		default:
 			fprintf(stderr, "Error: invalid ElementType(%d) in "

@@ -11,6 +11,7 @@
 											   .imageContainer=ImageContainer_Init(Vector2Dummy, \
 																				   Vector2Dummy, __VA_ARGS__)})
 #define Label_EleInit(...) ((Element){.type=Element_Label, .label=Label_Init(Vector2Dummy, 0, __VA_ARGS__)})
+#define Quote_EleInit(...) ((Element){.type=Element_Quote, .quote=Quote_Init(Vector2Dummy, 0, __VA_ARGS__)})
 #define Voyage_Error(message) ({printf("Error: %s\n", message); exit(1);})
 #define Voyage_ArraySize(array) (sizeof(array)/sizeof(array[0]))
 #define Voyage_ScreenDimen ((Vector2){.x=GetScreenWidth(), .y=GetScreenHeight()})
