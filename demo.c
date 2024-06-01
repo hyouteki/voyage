@@ -20,6 +20,9 @@ int main() {
 	Column_AddElement(&canvas, &Button_EleInit("Button inside canvas", NULL));	
 	Column_AddElement(&canvas, &Heading_EleInit("Lorem Ipsum"));	
 	Column_AddElement(&canvas, &Label_EleInit(lorem));
+	Column_AddElement(&canvas, &Space_EleInit(100));
+	Column_AddElement(&canvas, &Label_EleInit("There's 100 pixels worth of empty space above."));
+	Column_AddElement(&canvas, &Label_EleInit(lorem));
 	Column_AddElement(&canvas, &Label_EleInit(lorem));	
 	Column_AddElement(&canvas, &Quote_EleInit("This is a quote."));
 	Column_AddElement(&canvas, &Label_EleInit(lorem));

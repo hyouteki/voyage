@@ -8,12 +8,14 @@
 #include "image.h"
 #include "label.h"
 #include "quote.h"
+#include "space.h"
 
 typedef enum {
 	Element_Button,
 	Element_ImageContainer,
 	Element_Label,
-	Element_Quote
+	Element_Quote,
+	Element_Space
 } Element_Type;
 
 typedef struct Element {
@@ -24,6 +26,7 @@ typedef struct Element {
 		ImageContainer imageContainer;
 		Label label;
 		Quote quote;
+		Space space;
 	};
 } Element;
 
@@ -58,6 +61,9 @@ void Element_Reposition(Element *element, Vector2 pos) {
 	case Element_Quote:
 		Quote_Reposition(&element->quote, pos);
 		break;
+	case Element_Space:
+		Space_Reposition(&element->space, pos);
+		break;
 	default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
 				"Function(%s)\n", element->type, __func__);
@@ -68,8 +74,7 @@ void Element_Reposition(Element *element, Vector2 pos) {
 void Element_ResizeReposition(Element *element, Vector2 pos, Vector2 size) {
 	switch (element->type) {
 	case Element_Button:
-		element->button.pos = pos;
-		element->button.width = size.x;
+		Button_ResizeReposition(&element->button, pos, size.x);
 		break;
 	case Element_ImageContainer:
 		ImageContainer_ResizeReposition(&element->imageContainer, pos, size);
@@ -79,6 +84,9 @@ void Element_ResizeReposition(Element *element, Vector2 pos, Vector2 size) {
 		break;
 	case Element_Quote:
 		Quote_ResizeReposition(&element->quote, pos, size.x);
+		break;
+	case Element_Space:
+		Space_ResizeReposition(&element->space, pos, size.x);
 		break;
 	default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
@@ -93,6 +101,7 @@ Vector2 Element_Size(Element element) {
 	case Element_ImageContainer: return element.imageContainer.size;
 	case Element_Label: return Label_Size(element.label);
 	case Element_Quote: return Quote_Size(element.quote);
+	case Element_Space: return Space_Size(element.space);
 	default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
 				"Function(%s)\n", element.type, __func__);
@@ -151,6 +160,9 @@ void ElementList_Draw(ElementList *list) {
 			break;
 		case Element_Quote:
 			Quote_Draw(element.quote);
+			break;
+		case Element_Space:
+			Space_Draw(element.space);
 			break;
 		default:
 			fprintf(stderr, "Error: invalid ElementType(%d) in "

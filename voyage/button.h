@@ -35,6 +35,7 @@ typedef struct Button {
 Button Button_Init(Vector2, int, char *, void (*onClick)());
 void Button_SetOptions(Button *, ButtonOptions);
 void Button_Resize(Button *, int);
+void Button_ResizeReposition(Button *, Vector2, int);
 Vector2 Button_Size(Button);
 void Button_Draw(Button);
 
@@ -48,6 +49,11 @@ void Button_SetOptions(Button *button, ButtonOptions options) {
 }
 
 void Button_Resize(Button *button, int width) {
+	button->width = width;
+}
+
+void Button_ResizeReposition(Button *button, Vector2 pos, int width) {
+	button->pos = pos;
 	button->width = width;
 }
 

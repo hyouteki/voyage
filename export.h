@@ -13,5 +13,6 @@
 #include "voyage/row.h"
 #include "voyage/md.h"
 #include "voyage/quote.h"
+#include "voyage/space.h"
 
 #endif // VOYAGE_EXPORT_H_
