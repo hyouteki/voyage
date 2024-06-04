@@ -1,10 +1,8 @@
 #ifndef VOYAGE_LABEL_H_
 #define VOYAGE_LABEL_H_
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../raylib/include/raylib.h"
 #include "colors.h"
 #include "helper.h"
 
@@ -38,7 +36,7 @@ typedef struct Label {
 							  .textSpacingV=5, .hOffset=10, .vOffset=10})
 
 static void VecStr_Add(VecStr **, char *);
-static void Vecstr_Free(VecStr *);
+static void VecStr_Free(VecStr *);
 static void Label_WrapText(const char *, LabelOptions, int, VecStr **);
 
 Label Label_Init(Vector2, int, char *);
@@ -115,7 +113,7 @@ void Label_WrapText(const char* text, LabelOptions labelOptions,
 	char *line = (char *)malloc(sizeof(char)*1024);
 	if (!line) Voyage_Error("unable to allocate memory for line");
 	line[0] = 0;
-    int len = strlen(text), wordIndex = 0, lineIndex = 0;
+    int len = strlen(text), wordIndex = 0;
 	int maxWidth = width - 2*labelOptions.hOffset;
 	for (int i = 0; i <= len; i++) {
         if (text[i] == ' ' || text[i] == 0) {

@@ -1,9 +1,7 @@
 #ifndef VOYAGE_ELEMENTS_H_
 #define VOYAGE_ELEMENTS_H_
 
-#include <stdio.h>
 #include <stdlib.h>
-#include "../raylib/include/raylib.h"
 #include "button.h"
 #include "image.h"
 #include "label.h"

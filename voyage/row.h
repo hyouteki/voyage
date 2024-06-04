@@ -1,9 +1,7 @@
 #ifndef VOYAGE_ROW_H_
 #define VOYAGE_ROW_H_
 
-#include <stdio.h>
 #include <stdlib.h>
-#include "../raylib/include/raylib.h"
 #include "column.h"
 #include "helper.h"
 
@@ -33,7 +31,7 @@ static u32 Column_Counter = 0;
 
 static void ColumnList_Add(ColumnList **, Column *, u32);
 
-Row Row_Init(Vector2, Vector2, u32, Column *[], u32[]);
+Row Row_Init(Vector2, Vector2, u32 len, Column *[len], u32[len]);
 void Row_Free(Row *);
 void Row_AddColumn(Row *, Column *, u32);
 void Row_ScrollEventHandler(Row *);
@@ -57,7 +55,7 @@ static void ColumnList_Add(ColumnList **list, Column *column, u32 weight) {
 Row Row_Init(Vector2 pos, Vector2 size, u32 len, Column *columns[len], u32 weights[len]) {
 	if (len <= 0) Voyage_Error("len(columns) > 0 && len(weights) > 0");
 	ColumnList *columnList = NULL;
-	for (int i = 0; i < len; ++i) ColumnList_Add(&columnList, columns[i], weights[i]);
+	for (u32 i = 0; i < len; ++i) ColumnList_Add(&columnList, columns[i], weights[i]);
 	return (Row){.pos=pos, .size=size, .columns=columnList, .options=RowDefaultOptions};
 }
 

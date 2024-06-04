@@ -1,10 +1,8 @@
 #ifndef VOYAGE_QUOTE_H_
 #define VOYAGE_QUOTE_H_
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../raylib/include/raylib.h"
 #include "colors.h"
 #include "helper.h"
 #include "label.h"
@@ -72,7 +70,7 @@ void Quote_ResizeReposition(Quote *quote, Vector2 pos, int width) {
 }
 
 Vector2 Quote_Size(Quote quote) {
-	(Vector2){.x=quote.width, .y=Label_Size(quote.label).y+2*quote.options.vOffset};
+	return (Vector2){.x=quote.width, .y=Label_Size(quote.label).y+2*quote.options.vOffset};
 }
 
 void Quote_SetOptions(Quote *quote, QuoteOptions options) {
@@ -90,7 +88,6 @@ void Quote_Draw(Quote quote) {
 										   .height=labelHeight};
 	DrawRectangleRec(quoteContainer, quote.options.bgColor);
 	DrawRectangleRec(accentContainer, quote.options.accent);
-	u32 hPadding = quote.options.accentWidth+quote.options.hOffset;
 	Label_Draw(quote.label);
 }
 

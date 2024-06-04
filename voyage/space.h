@@ -1,8 +1,6 @@
 #ifndef VOYAGE_SPACE_H_
 #define VOYAGE_SPACE_H_
 
-#include <stdio.h>
-#include "../raylib/include/raylib.h"
 #include "colors.h"
 #include "helper.h"
 

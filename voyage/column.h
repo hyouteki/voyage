@@ -1,9 +1,7 @@
 #ifndef VOYAGE_COLUMN_H_
 #define VOYAGE_COLUMN_H_
 
-#include <stdio.h>
-#include "../raylib/include/raylib.h"
-#include "elements.h"
+ #include "elements.h"
 
 typedef struct ColumnOptions {
 	int hPadding;

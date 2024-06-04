@@ -1,9 +1,6 @@
 #ifndef VOYAGE_IMAGE_H_
 #define VOYAGE_IMAGE_H_
 
-#include <stdio.h>
-#include "../raylib/include/raylib.h"
-
 typedef struct ImageContainer {
 	Vector2 pos;
 	Vector2 size;

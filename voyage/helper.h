@@ -2,8 +2,6 @@
 #define VOYAGE_HELPER_H_
 
 #include <stdio.h>
-#include "../raylib/include/raylib.h"
-#include "elements.h"
 
 #define Vector2Dummy ((Vector2){0, 0})
 #define Button_EleInit(...) ((Element){.type=Element_Button, .button=Button_Init(Vector2Dummy, 0, __VA_ARGS__)})

@@ -2,7 +2,7 @@
 #define VOYAGE_EXPORT_H_
 
 #include <stdio.h>
-#include "raylib/include/raylib.h"
+#include <raylib.h>
 #include "voyage/column.h"
 #include "voyage/button.h"
 #include "voyage/elements.h"

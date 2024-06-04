@@ -2,7 +2,6 @@
 #define VOYAGE_BUTTON_H_
 
 #include <stdio.h>
-#include "../raylib/include/raylib.h"
 #include "colors.h"
 
 typedef struct ButtonOptions {

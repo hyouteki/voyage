@@ -10,8 +10,8 @@ int main() {
 	Voyage_Setup(900, 720, 60, "Voyage Demo", FLAG_WINDOW_RESIZABLE);
 	
 	Column sidebar = Column_Init(Vector2Dummy, Vector2Dummy, Voyage_Black);
-	Image image = LoadImage("./images/logo.png");
-	Column_AddElement(&sidebar, &ImageContainer_EleInit(&image));
+	/* Image image = LoadImage("./images/logo.png"); */
+	/* Column_AddElement(&sidebar, &ImageContainer_EleInit(&image)); */
 	Column_AddElement(&sidebar, &Button_EleInit("Menu button 1", &buttonOnClick));	
 	Column_AddElement(&sidebar, &Button_EleInit("Menu button 2", NULL));	
 	Column_AddElement(&sidebar, &Label_EleInit("Sample label with word wrap"));
