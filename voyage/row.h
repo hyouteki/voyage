@@ -11,7 +11,7 @@ typedef struct RowOptions {
 	u32 scrollSpeed;
 } RowOptions;
 
-#define RowDefaultOptions ((RowOptions){.hPadding=0, .vPadding=0, .scrollSpeed=10})
+#define RowDefaultOptions ((RowOptions){.hPadding=0, .vPadding=0, .scrollSpeed=20})
 
 typedef struct ColumnList {
 	u32 id;
@@ -79,7 +79,8 @@ void Row_ScrollEventHandler(Row *row) {
 	ColumnList *itr = row->columns;
 	Vector2 mousePoint = GetMousePosition();
 	while (itr) {
-		if (Voyage_CheckPointRecCollision(mousePoint, itr->column->pos, itr->column->size)) {
+		if (Voyage_CheckPointRecCollision(mousePoint, (Vector2){.x=itr->column->pos.x, .y=row->pos.y},
+										  itr->column->size)) {
 			int y = itr->column->pos.y + GetMouseWheelMove()*row->options.scrollSpeed;
 			Column_Reposition(itr->column, (Vector2){.x=itr->column->pos.x, .y=y});
 			break;
