@@ -22,13 +22,13 @@ int main() {
     Column sidebar = Column_Init(Vector2Dummy, Vector2Dummy, Voyage_Black);
     Image image = LoadImage("./images/logo.png");
     Column_AddElement(&sidebar, &ImageContainer_EleInit(&image));
-    Column_AddElement(&sidebar, &Button_EleInit("Menu button 1", &buttonOnClick));    
-    Column_AddElement(&sidebar, &Button_EleInit("Menu button 2", NULL));    
+    Column_AddElement(&sidebar, &Button_EleInit("Menu button 1", &buttonOnClick));
+    Column_AddElement(&sidebar, &Button_EleInit("Menu button 2", NULL));
     Column_AddElement(&sidebar, &Label_EleInit("Sample label with word wrap"));
 
     Column canvas = Column_Init(Vector2Dummy, Vector2Dummy, Voyage_DarkBrown);
-    Column_AddElement(&canvas, &Button_EleInit("Button inside canvas", NULL));    
-    Column_AddElement(&canvas, &Heading_EleInit("Lorem Ipsum"));    
+    Column_AddElement(&canvas, &Button_EleInit("Button inside canvas", NULL));
+    Column_AddElement(&canvas, &Heading_EleInit("Lorem Ipsum"));
     Column_AddElement(&canvas, &Label_EleInit(lorem));
     Column_AddElement(&canvas, &Label_EleInit(lorem));
     Column_AddElement(&canvas, &Label_EleInit(lorem));
@@ -38,7 +38,7 @@ int main() {
     
     while (!WindowShouldClose()) {
         Row_Resize(&row, Voyage_ScreenDimen);
-        Row_ScrollEventHandler(&row);    
+        Row_ScrollEventHandler(&row);
 
         BeginDrawing();
         ClearBackground(BLACK);
@@ -53,5 +53,16 @@ int main() {
 ```
 
 ## Quick Start
-- Build and install [Raylib](https://github.com/raysan5/raylib?tab=readme-ov-file#build-and-installation).
-- Run the demo using `make`.
+### Windows
+- Build and install [Raylib](https://github.com/raysan5/raylib/wiki/Working-on-Windows).
+- Open `w64devkit.exe` in `C:\raylib\w64devkit` then navigate to the **Voyage** dir and type the following.
+``` bash
+chmod +x build.sh
+./build.sh
+```
+
+### GNU/Linux
+``` bash
+chmod +x build.sh
+./build.sh
+```
