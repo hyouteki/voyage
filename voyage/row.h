@@ -43,6 +43,7 @@ static void ColumnList_Add(ColumnList **list, Column *column, u32 weight) {
 	listNode->id = Column_Counter++;
 	listNode->column = column;
 	listNode->weight = weight;
+	listNode->next = NULL;
 	if (*list == NULL) {
 		*list = listNode;
 		return;
