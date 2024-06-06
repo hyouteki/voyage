@@ -7,13 +7,15 @@
 #include "label.h"
 #include "quote.h"
 #include "space.h"
+#include "input.h"
 
 typedef enum {
 	Element_Button,
 	Element_ImageContainer,
 	Element_Label,
 	Element_Quote,
-	Element_Space
+	Element_Space,
+	Element_Input
 } Element_Type;
 
 typedef struct Element {
@@ -25,6 +27,7 @@ typedef struct Element {
 		Label label;
 		Quote quote;
 		Space space;
+		Input input;
 	};
 } Element;
 
@@ -38,12 +41,13 @@ static int Element_Counter = 0;
 void Element_Reposition(Element *, Vector2);
 void Element_ResizeReposition(Element *, Vector2, Vector2);
 Vector2 Element_Size(Element);
+void ElementList_Draw(ElementList *);
+void ElementList_AttachListener(ElementList *);
 
 void ElementList_Add(ElementList **, Element *);
 void ElementList_Free(ElementList *);
 int ElementList_TotalHeightTill(ElementList *, int, int);
 void ElementList_Resize(ElementList **, Vector2);
-void ElementList_Draw(ElementList *);
 
 void Element_Reposition(Element *element, Vector2 pos) {
 	switch (element->type) {
@@ -61,6 +65,9 @@ void Element_Reposition(Element *element, Vector2 pos) {
 		break;
 	case Element_Space:
 		Space_Reposition(&element->space, pos);
+		break;
+	case Element_Input:
+		element->input.pos = pos;
 		break;
 	default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
@@ -86,6 +93,9 @@ void Element_ResizeReposition(Element *element, Vector2 pos, Vector2 size) {
 	case Element_Space:
 		Space_ResizeReposition(&element->space, pos, size.x);
 		break;
+	case Element_Input:
+		Input_ResizeReposition(&element->input, pos, size.x);
+		break;
 	default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
 				"Function(%s)\n", element->type, __func__);
@@ -100,10 +110,70 @@ Vector2 Element_Size(Element element) {
 	case Element_Label: return Label_Size(element.label);
 	case Element_Quote: return Quote_Size(element.quote);
 	case Element_Space: return Space_Size(element.space);
+	case Element_Input: return Input_Size(element.input);
 	default:
 		fprintf(stderr, "Error: invalid ElementType(%d) in "
 				"Function(%s)\n", element.type, __func__);
 		exit(1);
+	}
+}
+
+void ElementList_Draw(ElementList *list) {
+	ElementList *itr = list;
+	while (itr) {
+		Element element = *itr->element;
+		switch (element.type) {
+		case Element_Button:
+			Button_Draw(element.button);
+			break;
+		case Element_ImageContainer:
+			ImageContainer_Draw(element.imageContainer);
+			break;
+		case Element_Label:
+			Label_Draw(element.label);
+			break;
+		case Element_Quote:
+			Quote_Draw(element.quote);
+			break;
+		case Element_Space:
+			Space_Draw(element.space);
+			break;
+		case Element_Input:
+			Input_Draw(element.input);
+			break;
+		default:
+			fprintf(stderr, "Error: invalid ElementType(%d) in "
+					"Function(%s)\n", element.type, __func__);
+			exit(1);
+		}
+		itr = itr->next;
+	}
+}
+
+void ElementList_AttachListener(ElementList *list) {
+	ElementList *itr = list;
+	while (itr) {
+		Element *element = itr->element;
+		switch (element->type) {
+		case Element_Button:
+			break;
+		case Element_ImageContainer:
+			break;
+		case Element_Label:
+			break;
+		case Element_Quote:
+			break;
+		case Element_Space:
+			break;
+		case Element_Input:
+			Input_TypeEventListener(&element->input);
+			break;
+		default:
+			fprintf(stderr, "Error: invalid ElementType(%d) in "
+					"Function(%s)\n", element->type, __func__);
+			exit(1);
+		}
+		itr = itr->next;
 	}
 }
 
@@ -141,34 +211,5 @@ int ElementList_TotalHeightTill(ElementList *list, int padding, int id) {
 	}
 	return height;
 } 
-
-void ElementList_Draw(ElementList *list) {
-	ElementList *itr = list;
-	while (itr) {
-		Element element = *itr->element;
-		switch (element.type) {
-		case Element_Button:
-			Button_Draw(element.button);
-			break;
-		case Element_ImageContainer:
-			ImageContainer_Draw(element.imageContainer);
-			break;
-		case Element_Label:
-			Label_Draw(element.label);
-			break;
-		case Element_Quote:
-			Quote_Draw(element.quote);
-			break;
-		case Element_Space:
-			Space_Draw(element.space);
-			break;
-		default:
-			fprintf(stderr, "Error: invalid ElementType(%d) in "
-					"Function(%s)\n", element.type, __func__);
-			exit(1);
-		}
-		itr = itr->next;
-	}
-}
 
 #endif // VOYAGE_ELEMENTS_H_

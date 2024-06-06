@@ -16,5 +16,11 @@ else
 fi
 
 gcc demo.c -o demo $CFLAGS $LFLAGS
-./demo
-rm -f demo demo.exe
+
+if [[ $? -eq 0 ]]; then
+    ./demo
+    rm -f demo demo.exe
+else
+    echo "Compilation failed"
+    exit 1
+fi

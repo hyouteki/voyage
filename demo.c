@@ -20,6 +20,7 @@ int main() {
 	Column_AddElement(&canvas, &Button_EleInit("Button inside canvas", NULL));
 	Column_AddElement(&canvas, &Heading_EleInit("Lorem Ipsum"));
 	Column_AddElement(&canvas, &Label_EleInit(lorem));
+	Column_AddElement(&canvas, &Input_EleInit("", NULL));
 	Column_AddElement(&canvas, &Space_EleInit(100));
 	Column_AddElement(&canvas, &Label_EleInit("There's 100 pixels worth of empty space above."));
 	Column_AddElement(&canvas, &Label_EleInit(lorem));
@@ -32,7 +33,7 @@ int main() {
 	
 	while (!WindowShouldClose()) {
 		Row_Resize(&row, Voyage_ScreenDimen);
-		Row_ScrollEventHandler(&row);
+		Row_AttachListeners(&row);
 
 		BeginDrawing();
 		ClearBackground(BLACK);

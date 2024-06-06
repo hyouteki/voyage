@@ -35,6 +35,7 @@ Row Row_Init(Vector2, Vector2, u32 len, Column *[len], u32[len]);
 void Row_Free(Row *);
 void Row_AddColumn(Row *, Column *, u32);
 void Row_ScrollEventHandler(Row *);
+void Row_AttachListeners(Row *);
 void Row_Resize(Row *, Vector2);
 void Row_Draw(Row);
 
@@ -85,6 +86,15 @@ void Row_ScrollEventHandler(Row *row) {
 			Column_Reposition(itr->column, (Vector2){.x=itr->column->pos.x, .y=y});
 			break;
 		}
+		itr = itr->next;
+	}
+}
+
+void Row_AttachListeners(Row *row) {
+	Row_ScrollEventHandler(row);
+	ColumnList *itr = row->columns;
+	while (itr) {
+		ElementList_AttachListener(itr->column->elements);
 		itr = itr->next;
 	}
 }

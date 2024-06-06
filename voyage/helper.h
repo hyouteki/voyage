@@ -11,11 +11,14 @@
 #define Label_EleInit(...) ((Element){.type=Element_Label, .label=Label_Init(Vector2Dummy, 0, __VA_ARGS__)})
 #define Quote_EleInit(...) ((Element){.type=Element_Quote, .quote=Quote_Init(Vector2Dummy, 0, __VA_ARGS__)})
 #define Space_EleInit(height) ((Element){.type=Element_Space, .space=Space_Init(Vector2Dummy, 0, height)})
+#define Input_EleInit(...) ((Element){.type=Element_Input, .input=Input_Init(Vector2Dummy, 0, __VA_ARGS__)})
+
 #define Voyage_Error(message) ({printf("Error: %s\n", message); exit(1);})
 #define Voyage_ArraySize(array) (sizeof(array)/sizeof(array[0]))
 #define Voyage_ScreenDimen ((Vector2){.x=GetScreenWidth(), .y=GetScreenHeight()})
 #define Voyage_Vector2Equal(vec1, vec2) ((int)vec1.x == (int)vec2.x && (int)vec1.y == (int)vec2.y)
 #define Voyage_MaxInt(n1, n2) (n1 > n2? n1: n2)
+#define Voyage_FontSize(options) (MeasureTextEx(options.font, "v", options.fontSize, options.textSpacing))
 
 typedef unsigned int u32;
 
