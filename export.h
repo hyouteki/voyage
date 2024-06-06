@@ -2,7 +2,13 @@
 #define VOYAGE_EXPORT_H_
 
 #include <stdio.h>
-#include <raylib.h>
+#ifdef _WIN64
+    #include "/raylib/raylib-5.0_win64_mingw-w64/include/raylib.h"
+#elif __linux__
+    #include <raylib.h>
+#else
+    #error "Unsupported OS; Supported OS (Windows, GNU/Linux)"
+#endif
 #include "voyage/column.h"
 #include "voyage/button.h"
 #include "voyage/elements.h"
