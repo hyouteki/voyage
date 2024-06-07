@@ -81,14 +81,19 @@ void Input_TypeEventListener(Input *input) {
 	input->state = Input_State_Inactive;
 	if (CheckCollisionPointRec(GetMousePosition(), container)) {
 		input->state = Input_State_Active;
-		int key = GetKeyPressed();
-		if (key >= 32 && key <= 255 && key != 127 && input->cursorIndex < input->options.maxChars) {
-			input->text[input->cursorIndex++] = key;
-			if (input->cursorIndex < input->options.maxChars) {
-				input->text[input->cursorIndex] = '_';
-				input->text[input->cursorIndex+1] = 0;
-			} else input->text[input->cursorIndex] = 0;
-		} else if ((key == 259 || key == 261 || key == 8 || key == 127) && input->cursorIndex > 0) {
+
+		int key = GetCharPressed();
+		while (key > 0) {
+			if (key >= 32 && key <= 125 && input->cursorIndex < input->options.maxChars) {
+				input->text[input->cursorIndex++] = key;
+				if (input->cursorIndex < input->options.maxChars) {
+					input->text[input->cursorIndex] = '_';
+					input->text[input->cursorIndex+1] = 0;
+				} else input->text[input->cursorIndex] = 0;
+			}
+			key = GetCharPressed();
+		}
+		if (IsKeyPressed(KEY_BACKSPACE) && input->cursorIndex > 0) {
 			input->text[input->cursorIndex] = 0;
 			input->text[--input->cursorIndex] = '_';
 		}
