@@ -81,8 +81,14 @@ void Input_TypeEventListener(Input *input) {
 	input->state = Input_State_Inactive;
 	if (CheckCollisionPointRec(GetMousePosition(), container)) {
 		input->state = Input_State_Active;
-
 		int key = GetCharPressed();
+		if (GetKeyPressed() == 257) {
+			input->text[input->cursorIndex] = 0;
+			input->onEnter(*input);
+			input->cursorIndex = 0;
+			input->text[input->cursorIndex] = '_';
+			input->text[input->cursorIndex+1] = 0;
+		}
 		while (key > 0) {
 			if (key >= 32 && key <= 125 && input->cursorIndex < input->options.maxChars) {
 				input->text[input->cursorIndex++] = key;
