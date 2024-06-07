@@ -11,22 +11,22 @@ int main() {
 	
 	Column sidebar = Column_Init(Vector2Dummy, Vector2Dummy, Voyage_Black);
 	Image image = LoadImage("./images/logo.png");
-	Column_AddElement(&sidebar, &ImageContainer_EleInit(&image));
-	Column_AddElement(&sidebar, &Button_EleInit("Menu button 1", &buttonOnClick));
-	Column_AddElement(&sidebar, &Button_EleInit("Menu button 2", NULL));
-	Column_AddElement(&sidebar, &Label_EleInit("Sample label with word wrap"));
+	Column_Add(&sidebar, &ImageContainer_EleInit(&image));
+	Column_Add(&sidebar, &Button_EleInit("Menu button 1", &buttonOnClick));
+	Column_Add(&sidebar, &Button_EleInit("Menu button 2", NULL));
+	Column_Add(&sidebar, &Label_EleInit("Sample label with word wrap"));
 
 	Column canvas = Column_Init(Vector2Dummy, Vector2Dummy, Voyage_DarkBrown);
-	Column_AddElement(&canvas, &Button_EleInit("Button inside canvas", NULL));
-	Column_AddElement(&canvas, &Heading_EleInit("Lorem Ipsum"));
-	Column_AddElement(&canvas, &Label_EleInit(lorem));
-	Column_AddElement(&canvas, &Input_EleInit("", NULL));
-	Column_AddElement(&canvas, &Space_EleInit(100));
-	Column_AddElement(&canvas, &Label_EleInit("There's 100 pixels worth of empty space above."));
-	Column_AddElement(&canvas, &Label_EleInit(lorem));
-	Column_AddElement(&canvas, &Label_EleInit(lorem));
-	Column_AddElement(&canvas, &Quote_EleInit("This is a quote."));
-	Column_AddElement(&canvas, &Label_EleInit(lorem));
+	Column_AddF(&canvas, &Button_EleInit("Fixed button inside canvas", NULL));
+	Column_Add(&canvas, &Heading_EleInit("Lorem Ipsum"));
+	Column_Add(&canvas, &Label_EleInit(lorem));
+	Column_Add(&canvas, &Input_EleInit("", NULL));
+	Column_Add(&canvas, &Space_EleInit(100));
+	Column_Add(&canvas, &Label_EleInit("There's 100 pixels worth of empty space above."));
+	Column_Add(&canvas, &Label_EleInit(lorem));
+	Column_Add(&canvas, &Label_EleInit(lorem));
+	Column_Add(&canvas, &Quote_EleInit("This is a quote."));
+	Column_Add(&canvas, &Label_EleInit(lorem));
 
 	Row row = Row_Init(Vector2Dummy, Vector2Dummy, 2,
 					   (Column *[]){&sidebar, &canvas}, (u32 []){1, 3});
