@@ -6,9 +6,10 @@
 typedef struct ColumnOptions {
 	int hPadding;
 	int vPadding;
+	int fixedElementGravity;
 } ColumnOptions;
 
-#define ColumnDefaultOptions ((ColumnOptions){.hPadding=5, .vPadding=5})
+#define ColumnDefaultOptions ((ColumnOptions){.hPadding=5, .vPadding=5, .fixedElementGravity=1})
 
 typedef struct Column {
 	Vector2 pos;
@@ -48,7 +49,10 @@ void Column_AddElement(Column *column, Element *element, int isFixed) {
 		ElementList_Add(&column->fixedElements, element);
 	} else {
 		int height = ElementList_TotalHeightTill(column->elements, column->options.vPadding, -1);
-		Element_ResizeReposition(element, (Vector2){column->pos.x+column->options.hPadding, column->pos.y+height},
+		int yPos = column->pos.y+height;
+		if (column->options.fixedElementGravity)
+			yPos = column->pos.y+column->size.y-height-Element_Size(*element).y-column->options.vPadding;
+		Element_ResizeReposition(element, (Vector2){column->pos.x+column->options.hPadding, yPos},
 								 (Vector2){column->size.x-2*column->options.hPadding, -1});
 		ElementList_Add(&column->elements, element);
 	}
@@ -70,8 +74,10 @@ void Column_Resize(Column *column, Vector2 size) {
 	_counter = 0;
 	while (itr) {
 		int height = ElementList_TotalHeightTill(column->fixedElements, column->options.vPadding, _counter);
-		Element_ResizeReposition(itr->element, (Vector2){column->pos.x+column->options.hPadding,
-														 column->pos.y+height},
+		int yPos = column->pos.y+height;
+		if (column->options.fixedElementGravity)
+			yPos = column->pos.y+column->size.y-height-Element_Size(*itr->element).y-column->options.vPadding;
+		Element_ResizeReposition(itr->element, (Vector2){column->pos.x+column->options.hPadding, yPos},
 								 (Vector2){column->size.x-2*column->options.hPadding, -1});
 		itr = itr->next;
 		_counter++;

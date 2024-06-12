@@ -18,6 +18,7 @@ int main() {
 
 	Column canvas = Column_Init(Vector2Dummy, Vector2Dummy, Voyage_DarkBrown);
 	Column_AddF(&canvas, &Button_EleInit("Fixed button inside canvas", NULL));
+	Column_Add(&canvas, &Button_EleInit("Button inside canvas", NULL));
 	Column_Add(&canvas, &Heading_EleInit("Lorem Ipsum"));
 	Column_Add(&canvas, &Label_EleInit(lorem));
 	Column_Add(&canvas, &Input_EleInit("", NULL));

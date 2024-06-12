@@ -10,19 +10,19 @@ typedef struct InputOptions {
 	Color border;
 	Color accent;
 	Font font;
-	int fontSize;
-	int maxChars;
-	int textSpacing;
-	int hOffset;
-	int vOffset;
-	int borderWidth;
+	u32 fontSize;
+	u32 maxChars;
+	u32 textSpacing;
+	u32 hOffset;
+	u32 vOffset;
+	u32 borderWidth;
 } InputOptions;
 
 typedef struct Input {
 	Vector2 pos;
-	int width;
+	u32 width;
 	char *text;
-	int cursorIndex;
+	u32 cursorIndex;
 	enum Input_State {
 		Input_State_Active,
 		Input_State_Inactive
@@ -41,18 +41,20 @@ void InputDefaultOnEnter(Input input) {
 	printf("Log: Input(%s) entered\n", input.text);
 }
 
-Input Input_Init(Vector2, int, char *, void (*)(Input));
+Input Input_Init(Vector2, u32, char *, void (*)(Input));
 void Input_SetOptions(Input *, InputOptions);
-void Input_Resize(Input *, int);
-void Input_ResizeReposition(Input *, Vector2, int);
+void Input_Resize(Input *, u32);
+void Input_ResizeReposition(Input *, Vector2, u32);
 Vector2 Input_Size(Input);
 void Input_Draw(Input);
 
-Input Input_Init(Vector2 pos, int width, char *initialText, void (*onEnter)(Input)) {
+Input Input_Init(Vector2 pos, u32 width, char *initialText, void (*onEnter)(Input)) {
 	char *text = (char *)malloc(sizeof(char)*(InputDefaultOptions.maxChars+1));
-	memcpy(text, initialText, InputDefaultOptions.maxChars);
-	text[strlen(text)] = '_';
-	text[InputDefaultOptions.maxChars] = 0;
+	*text = 0;
+	u32 hintLen = Voyage_Min(InputDefaultOptions.maxChars, (u32)strlen(initialText));
+	if (hintLen) memcpy(text, initialText, hintLen);
+	text[hintLen] = '_';
+	text[hintLen+1] = 0;
 	return (Input){.pos = pos, .width=width, .text=text, .options=InputDefaultOptions,
 				   .onEnter = onEnter? onEnter: &InputDefaultOnEnter, .cursorIndex=0,
 				   .state = Input_State_Inactive};
@@ -62,11 +64,11 @@ void Input_SetOptions(Input *input, InputOptions options) {
 	input->options = options;
 }
 
-void Input_Resize(Input *input, int width) {
+void Input_Resize(Input *input, u32 width) {
 	input->width = width;
 }
 
-void Input_ResizeReposition(Input *input, Vector2 pos, int width) {
+void Input_ResizeReposition(Input *input, Vector2 pos, u32 width) {
 	input->pos = pos;
 	input->width = width;
 }
