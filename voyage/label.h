@@ -30,10 +30,12 @@ typedef struct Label {
     LabelOptions options;
 } Label;
 
-#define LabelDefaultOptions ((LabelOptions)								\
-                             {.bgColor=Voyage_LightGrey, .fgColor=Voyage_White, \
-							  .font=GetFontDefault(), .fontSize=24, .textSpacing=3, \
-							  .textSpacingV=5, .hOffset=10, .vOffset=10})
+extern FontW defaultFont;
+
+#define LabelDefaultOptions ((LabelOptions){.bgColor=Voyage_LightGrey, .fgColor=Voyage_White, \
+											.font=defaultFont.font, .fontSize=defaultFont.fontSize, \
+											.textSpacing=defaultFont.textSpacing, \
+											.textSpacingV=5, .hOffset=10, .vOffset=10})
 
 static void VecStr_Add(VecStr **, char *);
 static void VecStr_Free(VecStr *);

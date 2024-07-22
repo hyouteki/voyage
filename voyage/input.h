@@ -30,12 +30,15 @@ typedef struct Input {
 	InputOptions options;
 	void (*onEnter)(struct Input);
 } Input;
- 
+
+extern FontW defaultFont;
+
 #define InputDefaultOptions ((InputOptions)								\
 							 {.bgColor=Voyage_Black,  .fgColor=Voyage_White, \
 							  .border=Voyage_LightGrey, .accent=Voyage_White, \
-							  .font=GetFontDefault(), .fontSize=24, .maxChars=50, \
-							  .textSpacing=3, .hOffset=10, .vOffset=10, .borderWidth=2})
+							  .font=defaultFont.font, .fontSize=defaultFont.fontSize, \
+							  .textSpacing=defaultFont.textSpacing, .maxChars=50, \
+							  .hOffset=10, .vOffset=10, .borderWidth=2})
 
 void InputDefaultOnEnter(Input input) {
 	printf("Log: Input(%s) entered\n", input.text);

@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "colors.h"
+#include "helper.h"
 
 typedef struct ButtonOptions {
 	int centerText;
@@ -23,11 +24,14 @@ typedef struct Button {
 	ButtonOptions options;
 	void (*onClick)();
 } Button;
- 
+
+extern FontW defaultFont;
+
 #define ButtonDefaultOptions ((ButtonOptions)							\
 							  {.centerText=1, .bgColor=Voyage_LightGrey, \
 							   .fgColor=Voyage_White, .border=Voyage_DarkGrey, \
-							   .font=GetFontDefault(), .fontSize=24, .textSpacing=3, \
+							   .font=defaultFont.font, .fontSize=defaultFont.fontSize, \
+							   .textSpacing=defaultFont.textSpacing,	\
 							   .hOffset=10, .vOffset=10})
 #define ButtonDefaultOnClick() (printf("Log: Button(%s) clicked\n", button.text))
 

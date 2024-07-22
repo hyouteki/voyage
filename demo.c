@@ -10,7 +10,7 @@ int main() {
 	Voyage_Setup(900, 720, 60, "Voyage Demo", FLAG_WINDOW_RESIZABLE);
 	
 	Column sidebar = Column_Init(Vector2Dummy, Vector2Dummy, Voyage_Black);
-	Image image = LoadImage("./images/logo.png");
+	Image image = LoadImage("./resources/logo.png");
 	Column_Add(&sidebar, &ImageContainer_EleInit(&image));
 	Column_Add(&sidebar, &Button_EleInit("Menu button 1", &buttonOnClick));
 	Column_Add(&sidebar, &Button_EleInit("Menu button 2", NULL));

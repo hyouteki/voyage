@@ -23,14 +23,25 @@
 
 typedef unsigned int u32;
 
+typedef struct FontW {
+    Font font;
+    int fontSize;
+    int textSpacing;
+} FontW;
+
+FontW defaultFont;
+
 void Voyage_Setup(u32, u32, u32, char *, u32);
 int Voyage_CheckPointRecCollision(Vector2, Vector2, Vector2);
-float voyage_MouseWheelMove();
+float Voyage_MouseWheelMove();
+void Voyage_InitDefaultFont();
 
 void Voyage_Setup(u32 width, u32 height, u32 fps, char *name, u32 flags) {
 	SetConfigFlags(flags);
 	InitWindow(width, height, name);
 	SetTargetFPS(fps);
+	/* Voyage_InitDefaultFont("PlayFair.ttf", 32, 1); */
+	Voyage_InitDefaultFont("./resources/FiraSans.ttf", 32, 0);
 }
 
 int Voyage_CheckPointRecCollision(Vector2 pointPos, Vector2 recPos, Vector2 recSize) {
@@ -42,6 +53,12 @@ float Voyage_MouseWheelMove() {
 	float x = GetMouseWheelMove();
 	if (x != 0) x = x > 0? 1: -1;
 	return x;
+}
+
+void Voyage_InitDefaultFont(char *fontName, u32 fontSize, u32 textSpacing) {
+    defaultFont.font = LoadFontEx(fontName, fontSize, NULL, 0);
+    defaultFont.fontSize = fontSize;
+    defaultFont.textSpacing = textSpacing;
 }
 
 #endif // VOYAGE_HELPER_H_
