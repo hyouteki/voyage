@@ -44,6 +44,8 @@ void InputDefaultOnEnter(Input input) {
 	printf("Log: Input(%s) entered\n", input.text);
 }
 
+char cursorChar = '|';
+
 Input Input_Init(Vector2, u32, char *, void (*)(Input));
 void Input_SetOptions(Input *, InputOptions);
 void Input_Resize(Input *, u32);
@@ -56,7 +58,7 @@ Input Input_Init(Vector2 pos, u32 width, char *initialText, void (*onEnter)(Inpu
 	*text = 0;
 	u32 hintLen = Voyage_Min(InputDefaultOptions.maxChars, (u32)strlen(initialText));
 	if (hintLen) memcpy(text, initialText, hintLen);
-	text[hintLen] = '_';
+	text[hintLen] = cursorChar;
 	text[hintLen+1] = 0;
 	return (Input){.pos = pos, .width=width, .text=text, .options=InputDefaultOptions,
 				   .onEnter = onEnter? onEnter: &InputDefaultOnEnter, .cursorIndex=0,
@@ -91,14 +93,14 @@ void Input_TypeEventListener(Input *input) {
 			input->text[input->cursorIndex] = 0;
 			input->onEnter(*input);
 			input->cursorIndex = 0;
-			input->text[input->cursorIndex] = '_';
+			input->text[input->cursorIndex] = cursorChar;
 			input->text[input->cursorIndex+1] = 0;
 		}
 		while (key > 0) {
 			if (key >= 32 && key <= 125 && input->cursorIndex < input->options.maxChars) {
 				input->text[input->cursorIndex++] = key;
 				if (input->cursorIndex < input->options.maxChars) {
-					input->text[input->cursorIndex] = '_';
+					input->text[input->cursorIndex] = cursorChar;
 					input->text[input->cursorIndex+1] = 0;
 				} else input->text[input->cursorIndex] = 0;
 			}
@@ -106,7 +108,7 @@ void Input_TypeEventListener(Input *input) {
 		}
 		if (IsKeyPressed(KEY_BACKSPACE) && input->cursorIndex > 0) {
 			input->text[input->cursorIndex] = 0;
-			input->text[--input->cursorIndex] = '_';
+			input->text[--input->cursorIndex] = cursorChar;
 		}
 	}
 }

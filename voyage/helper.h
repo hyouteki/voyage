@@ -2,6 +2,7 @@
 #define VOYAGE_HELPER_H_
 
 #include <stdio.h>
+#include <string.h>
 
 #define Vector2Dummy ((Vector2){0, 0})
 #define Button_EleInit(...) ((Element){.type=Element_Button, .button=Button_Init(Vector2Dummy, 0, __VA_ARGS__)})
@@ -24,6 +25,7 @@
 typedef unsigned int u32;
 
 typedef struct FontW {
+	char *fontPath;
     Font font;
     int fontSize;
     int textSpacing;
@@ -35,6 +37,7 @@ void Voyage_Setup(u32, u32, u32, char *, u32);
 int Voyage_CheckPointRecCollision(Vector2, Vector2, Vector2);
 float Voyage_MouseWheelMove();
 void Voyage_InitDefaultFont();
+Font Voyage_ChangeFontSize(FontW, u32);
 
 void Voyage_Setup(u32 width, u32 height, u32 fps, char *name, u32 flags) {
 	SetConfigFlags(flags);
@@ -55,10 +58,15 @@ float Voyage_MouseWheelMove() {
 	return x;
 }
 
-void Voyage_InitDefaultFont(char *fontName, u32 fontSize, u32 textSpacing) {
-    defaultFont.font = LoadFontEx(fontName, fontSize, NULL, 0);
+void Voyage_InitDefaultFont(char *fontPath, u32 fontSize, u32 textSpacing) {
+	defaultFont.fontPath = strdup(fontPath);
+    defaultFont.font = LoadFontEx(fontPath, fontSize, NULL, 0);
     defaultFont.fontSize = fontSize;
     defaultFont.textSpacing = textSpacing;
+}
+
+Font Voyage_ChangeFontSize(FontW fontW, u32 fontSize) {
+    return LoadFontEx(fontW.fontPath, fontSize, NULL, 0);
 }
 
 #endif // VOYAGE_HELPER_H_
