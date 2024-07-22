@@ -41,6 +41,7 @@ static int Element_Counter = 0;
 void Element_Reposition(Element *, Vector2);
 void Element_ResizeReposition(Element *, Vector2, Vector2);
 Vector2 Element_Size(Element);
+void Element_DeInit(Element *);
 void ElementList_Draw(ElementList *);
 void ElementList_AttachListener(ElementList *);
 
@@ -118,6 +119,25 @@ Vector2 Element_Size(Element element) {
 	}
 }
 
+void Element_DeInit(Element *element) {
+	switch (element->type) {
+	case Element_Button:
+		break;
+	case Element_ImageContainer:
+		ImageContainer_DeInit(element->imageContainer);
+		break;
+	case Element_Label:
+	case Element_Quote:
+	case Element_Space:
+	case Element_Input:
+		break;
+	default:
+		fprintf(stderr, "Error: invalid ElementType(%d) in "
+				"Function(%s)\n", element->type, __func__);
+		exit(1);
+	}
+}
+
 void ElementList_Draw(ElementList *list) {
 	ElementList *itr = list;
 	while (itr) {
@@ -156,13 +176,9 @@ void ElementList_AttachListener(ElementList *list) {
 		Element *element = itr->element;
 		switch (element->type) {
 		case Element_Button:
-			break;
 		case Element_ImageContainer:
-			break;
 		case Element_Label:
-			break;
 		case Element_Quote:
-			break;
 		case Element_Space:
 			break;
 		case Element_Input:
@@ -195,6 +211,7 @@ void ElementList_Add(ElementList **list, Element *node) {
 void ElementList_Free(ElementList *elementList) {
 	while (elementList) {
 		ElementList *next = elementList->next;
+		Element_DeInit(elementList->element);
 		free(elementList->element);
 		free(elementList);
 		elementList = next;
