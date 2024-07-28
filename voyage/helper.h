@@ -38,6 +38,8 @@ int Voyage_CheckPointRecCollision(Vector2, Vector2, Vector2);
 float Voyage_MouseWheelMove();
 void Voyage_InitDefaultFont();
 Font Voyage_ChangeFontSize(FontW, u32);
+void Voyage_Xml_Error(char *);
+void Voyage_Xml_ErrorFmt(char *, ...);
 
 void Voyage_Setup(u32 width, u32 height, u32 fps, char *name, u32 flags) {
 	SetConfigFlags(flags);
@@ -67,6 +69,22 @@ void Voyage_InitDefaultFont(char *fontPath, u32 fontSize, u32 textSpacing) {
 
 Font Voyage_ChangeFontSize(FontW fontW, u32 fontSize) {
     return LoadFontEx(fontW.fontPath, fontSize, NULL, 0);
+}
+
+void Voyage_Xml_Error(char *message) {
+	printf("[ERR] xml-module: %s\n", message);
+	exit(EXIT_FAILURE);
+}
+
+void Voyage_Xml_ErrorFmt(char *format, ...) {
+	va_list args;
+    va_start(args, format);
+	printf("[ERR] xml-module: ");
+	exit(EXIT_FAILURE);
+    vprintf(format, args);
+    printf("\n");
+    va_end(args);
+    exit(EXIT_FAILURE);
 }
 
 #endif // VOYAGE_HELPER_H_

@@ -2,8 +2,10 @@
 #define VOYAGE_BUTTON_H_
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "colors.h"
 #include "helper.h"
+#include "../cxmlp/node.h"
 
 typedef struct ButtonOptions {
 	int centerText;
@@ -35,7 +37,8 @@ extern FontW defaultFont;
 							   .hOffset=10, .vOffset=10})
 #define ButtonDefaultOnClick() (printf("Log: Button(%s) clicked\n", button.text))
 
-Button Button_Init(Vector2, int, char *, void (*onClick)());
+Button Button_Init(Vector2, int, char *, void (*)());
+Button Button_InitAtr(XmlNode *);
 void Button_SetOptions(Button *, ButtonOptions);
 void Button_Resize(Button *, int);
 void Button_ResizeReposition(Button *, Vector2, int);
@@ -44,8 +47,56 @@ void Button_Draw(Button);
 
 Button Button_Init(Vector2 pos, int width, char *text, void (*onClick)()) {
 	return (Button){.pos = pos, .width=width, .text=text,
-					.options=ButtonDefaultOptions, .onClick = onClick};
+					.options=ButtonDefaultOptions, .onClick=onClick};
 }
+
+Button Button_InitAtr(XmlNode *root) {
+	if (strcmp(root->name, "button") != 0) {
+		Voyage_Xml_ErrorFmt("expected node <button>; but got '<%s>'", root->name);
+	}
+	Button button = (Button){.pos = Vector2Dummy, .width=0,
+							 .options=ButtonDefaultOptions, .onClick=NULL};
+	Steel_Node *itr = Steel_LL_Head(root->attributes);
+	char *fontPath = NULL;
+	while (itr) {
+		Attribute *attribute = (Attribute *)itr->data;
+		if (strcmp(attribute->name, "center-text") == 0) {
+			button.options.centerText = strcmp(attribute->value, "true") == 0;
+		}
+		if (strcmp(attribute->name, "background") == 0) {
+			button.options.bgColor = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "foreground") == 0) {
+			button.options.fgColor = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "border") == 0) {
+			button.options.border = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "font") == 0) {
+			fontPath = strdup(attribute->value);
+		}
+		if (strcmp(attribute->name, "font-size") == 0) {
+			button.options.fontSize = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "text-spacing") == 0) {
+			button.options.textSpacing = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "horizontal-offset") == 0) {
+			button.options.hOffset = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "vertical-offset") == 0) {
+			button.options.vOffset = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "text") == 0) {
+			button.text = strdup(attribute->value);
+		}
+		Steel_Node_Next(itr);
+	}
+	if (fontPath) {
+		button.options.font = LoadFontEx(fontPath, button.options.fontSize, NULL, 0);
+	}
+	return button;
+} 
 
 void Button_SetOptions(Button *button, ButtonOptions options) {
 	button->options = options;

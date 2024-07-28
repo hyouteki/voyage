@@ -1,0 +1,3 @@
+[submodule "cxmlp"]
+	path = cxmlp
+	url = https://github.com/hyouteki/cxmlp.git

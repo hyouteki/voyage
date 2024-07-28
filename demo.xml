@@ -1,0 +1,15 @@
+<row id="main">
+  <column id="sidebar" weight="1" background="black">
+	<image id="logo" src="./resources/logo.png"/>
+	<button id="menu-button-1" text="Menu button 1"/>
+	<label id="menu-label" text="Sample label with word wrap"/>
+  </column>
+  <column id="canvas" weight="3" background="dark-brown">
+	<button id="button-canvas" text="Button inside Canvas"/>
+	<button id="fixed-button" text="Fixed Button inside Canvas"
+			fixed="true"/>
+	<label id="lorem-heading" foreground="light-green" font-size="36"
+		   text="Lorem Ipsum"/>
+	<label id="lorem" text="Lorem ipsum dolor sit amet, consectetur adipiscingelit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+  </column>
+</row>

@@ -1,6 +1,7 @@
 #ifndef VOYAGE_COLORS_H_
 #define VOYAGE_COLORS_H_
 
+#include <string.h>
 #include <raylib.h>
 
 #define Voyage_LightGrey (Color){58, 58, 58, 225}
@@ -15,5 +16,22 @@
 #define Voyage_Black (Color){9, 9, 9, 255}
 #define Voyage_LightGreen (Color){166, 226, 46, 255}
 #define Voyage_OffBrown (Color){73, 72, 62, 255}
+#define Voyage_Color_Default (Voyage_Blue)
+
+Color Voyage_Color_FromString(char *name) {
+	if (strcmp("light-grey", name) == 0) return Voyage_LightGrey;
+	if (strcmp("dark-grey", name) == 0) return Voyage_DarkGrey;
+	if (strcmp("white", name) == 0) return Voyage_White;
+	if (strcmp("light-aqua", name) == 0) return Voyage_LightAqua;
+	if (strcmp("dark-aqua", name) == 0) return Voyage_DarkAqua;
+	if (strcmp("light-blue", name) == 0) return Voyage_LightBlue;
+	if (strcmp("blue", name) == 0) return Voyage_Blue;
+	if (strcmp("brown", name) == 0) return Voyage_Brown;
+	if (strcmp("dark-brown", name) == 0) return Voyage_DarkBrown;
+	if (strcmp("black", name) == 0) return Voyage_Black;
+	if (strcmp("light-green", name) == 0) return Voyage_LightGreen;
+	if (strcmp("off-brown", name) == 0) return Voyage_OffBrown;
+	return Voyage_Color_Default;
+}
 
 #endif // VOYAGE_COLORS_H_

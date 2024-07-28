@@ -20,5 +20,6 @@
 #include "voyage/md.h"
 #include "voyage/quote.h"
 #include "voyage/space.h"
+#include "voyage/xml_handler.h"
 
 #endif // VOYAGE_EXPORT_H_

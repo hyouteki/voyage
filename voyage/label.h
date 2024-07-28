@@ -5,6 +5,7 @@
 #include <string.h>
 #include "colors.h"
 #include "helper.h"
+#include "../cxmlp/node.h"
 
 typedef struct LabelOptions {
     Color bgColor;
@@ -42,6 +43,7 @@ static void VecStr_Free(VecStr *);
 static void Label_WrapText(const char *, LabelOptions, int, VecStr **);
 
 Label Label_Init(Vector2, int, char *);
+Label Label_InitAtr(XmlNode *);
 Label Label_InitC(Vector2, int, char *, LabelOptions);
 void Label_ResizeReposition(Label *, Vector2, int);
 Vector2 Label_Size(Label);
@@ -79,11 +81,57 @@ Label Label_Init(Vector2 pos, int width, char *text) {
 				   .vecstr = vecstr, .options = LabelDefaultOptions};
 }
 
+Label Label_InitAtr(XmlNode *root) {
+	if (strcmp(root->name, "label") != 0) {
+		Voyage_Xml_ErrorFmt("expected node <label>; but got '<%s>'", root->name);
+	}
+	VecStr *vecstr = NULL;
+	Label label = (Label){.pos = Vector2Dummy, .width=0, .options=LabelDefaultOptions, .text=""};
+	Steel_Node *itr = Steel_LL_Head(root->attributes);
+	char *fontPath = NULL;
+	while (itr) {
+		Attribute *attribute = (Attribute *)itr->data;
+		if (strcmp(attribute->name, "background") == 0) {
+			label.options.bgColor = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "foreground") == 0) {
+			label.options.fgColor = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "font") == 0) {
+			fontPath = strdup(attribute->value);
+		}
+		if (strcmp(attribute->name, "font-size") == 0) {
+			label.options.fontSize = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "text-spacing") == 0) {
+			label.options.textSpacing = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "vertical-text-spacing") == 0) {
+			label.options.textSpacingV = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "horizontal-offset") == 0) {
+			label.options.hOffset = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "vertical-offset") == 0) {
+			label.options.vOffset = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "text") == 0) {
+			label.text = strdup(attribute->value);
+		}
+		Steel_Node_Next(itr);
+	}
+	if (fontPath) {
+		label.options.font = LoadFontEx(fontPath, label.options.fontSize, NULL, 0);
+	}
+	Label_WrapText(label.text, label.options, 0, &vecstr);
+	return label;
+} 
+
 Label Label_InitC(Vector2 pos, int width, char *text, LabelOptions options) {
 	VecStr *vecstr = NULL;
 	Label_WrapText(text, LabelDefaultOptions, width, &vecstr);
     return (Label){.pos = pos, .width=width, .text=text, .vecstr = vecstr, .options = options};
-} 
+}
 
 void Label_ResizeReposition(Label *label, Vector2 pos, int width) {
 	label->pos = pos;

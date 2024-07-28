@@ -15,11 +15,12 @@ else
     fi
 fi
 
-gcc demo.c -o demo $CFLAGS $LFLAGS
+FILENAME="xml_test"
+gcc $FILENAME.c -o $FILENAME $CFLAGS $LFLAGS
 
 if [[ $? -eq 0 ]]; then
-    ./demo
-    rm -f demo demo.exe
+    ./$FILENAME
+    rm -f $FILENAME $FILENAME.exe
 else
     echo "Compilation failed"
     exit 1

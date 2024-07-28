@@ -2,12 +2,15 @@
 #define VOYAGE_ELEMENTS_H_
 
 #include <stdlib.h>
+#include <string.h>
+#include "column.h"
 #include "button.h"
 #include "image.h"
 #include "label.h"
 #include "quote.h"
 #include "space.h"
 #include "input.h"
+#include "../cxmlp/node.h"
 
 typedef enum {
 	Element_Button,
@@ -38,6 +41,7 @@ typedef struct ElementList {
 
 static int Element_Counter = 0;
 
+void ElementList_InitAtr(ElementList **, ElementList **, Steel_LL *);
 void Element_Reposition(Element *, Vector2);
 void Element_ResizeReposition(Element *, Vector2, Vector2);
 Vector2 Element_Size(Element);
@@ -49,6 +53,40 @@ void ElementList_Add(ElementList **, Element *);
 void ElementList_Free(ElementList *);
 int ElementList_TotalHeightTill(ElementList *, int, int);
 void ElementList_Resize(ElementList **, Vector2);
+
+void ElementList_InitAtr(ElementList **elements, ElementList **fixedElements,
+						 Steel_LL *childs) {
+	Steel_Node *itr = Steel_LL_Head(childs);
+	while (itr) {
+		XmlNode *child = (XmlNode *)itr->data;
+		Element *element = (Element *)malloc(sizeof(Element));
+		int fixed = 0;
+		{
+			Steel_Node *itr = Steel_LL_Head(child->attributes);
+			while (itr) {
+				Attribute *child = (Attribute *)itr->data;
+				if (strcmp(child->name, "fixed") == 0) {
+					fixed = strcmp(child->value, "true") == 0;
+				}
+				Steel_Node_Next(itr);
+			} 
+		}
+		if (strcmp(child->name, "button") == 0) {
+			element->type = Element_Button;
+			element->button = Button_InitAtr(child);
+		}
+		if (strcmp(child->name, "image") == 0) {
+			element->type = Element_ImageContainer;
+			element->imageContainer = ImageContainer_InitAtr(child);
+		}
+		if (strcmp(child->name, "label") == 0) {
+			element->type = Element_Label;
+			element->label = Label_InitAtr(child);
+		}
+		ElementList_Add(fixed? fixedElements: elements, element);
+		Steel_Node_Next(itr);
+	}
+}
 
 void Element_Reposition(Element *element, Vector2 pos) {
 	switch (element->type) {

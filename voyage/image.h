@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include "helper.h"
+#include "../cxmlp/node.h"
 
 typedef struct ImageContainer {
 	Vector2 pos;
@@ -13,6 +14,7 @@ typedef struct ImageContainer {
 } ImageContainer;
 
 ImageContainer ImageContainer_Init(Vector2, Vector2, Image *);
+ImageContainer ImageContainer_InitAtr(XmlNode *);
 void ImageContainer_ResizeReposition(ImageContainer *, Vector2, Vector2);
 void ImageContainer_Draw(ImageContainer);
 
@@ -22,6 +24,26 @@ ImageContainer ImageContainer_Init(Vector2 pos, Vector2 size, Image *image) {
 	Texture2D *texture = (Texture2D *)malloc(sizeof(Texture2D));
 	*reloadTexture = 1;
 	return (ImageContainer){.pos=pos, .size=size, .image=image, .texture=texture, .reloadTexture=reloadTexture};
+}
+
+ImageContainer ImageContainer_InitAtr(XmlNode *root) {
+	if (strcmp(root->name, "image") != 0) {
+		Voyage_Xml_ErrorFmt("expected node <image>; but got '<%s>'", root->name);
+	}
+	ImageContainer imageContainer = (ImageContainer){.pos = Vector2Dummy, .size=Vector2Dummy};
+	imageContainer.reloadTexture = (int *)malloc(sizeof(int));
+	imageContainer.texture = (Texture2D *)malloc(sizeof(Texture2D));
+	imageContainer.image = (Image *)malloc(sizeof(Image));
+	*imageContainer.reloadTexture = 1;
+	Steel_Node *itr = Steel_LL_Head(root->attributes);
+	while (itr) {
+		Attribute *attribute = (Attribute *)itr->data;
+		if (strcmp(attribute->name, "src") == 0) {
+			*imageContainer.image = LoadImage(attribute->value);
+		}
+		Steel_Node_Next(itr);
+	}
+	return imageContainer;
 }
 
 void ImageContainer_ResizeReposition(ImageContainer *imageContainer, Vector2 pos, Vector2 size) {

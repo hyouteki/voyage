@@ -1,7 +1,10 @@
 #ifndef VOYAGE_COLUMN_H_
 #define VOYAGE_COLUMN_H_
 
- #include "elements.h"
+#include "../cxmlp/node.h"
+#include "colors.h"
+#include "elements.h"
+#include "helper.h"
 
 typedef struct ColumnOptions {
 	int hPadding;
@@ -26,6 +29,7 @@ typedef struct Column {
 #define Column_AddF(column, element) (Column_AddElement(column, element, 1))
 
 Column Column_Init(Vector2, Vector2, Color);
+Column *Column_InitAtr(XmlNode *, u32 *);
 void Column_Free(Column *);
 void Column_AddElement(Column *, Element *, int);
 void Column_Resize(Column *, Vector2);
@@ -36,6 +40,37 @@ void Column_Draw(Column);
 Column Column_Init(Vector2 pos, Vector2 size, Color color) {
 	return (Column){.pos=pos, .size=size, .color=color, .elements=NULL, .options=ColumnDefaultOptions};
 }
+
+Column *Column_InitAtr(XmlNode *root, u32 *weight) {
+	if (strcmp(root->name, "column") != 0) {
+		Voyage_Xml_ErrorFmt("expected node <column>; but got '<%s>'", root->name);
+	}
+	Steel_Node *itr = Steel_LL_Head(root->attributes);
+	Column *column = (Column *)malloc(sizeof(Column));
+	*column = (Column){.pos=Vector2Dummy, .size=Vector2Dummy, .color=Voyage_Color_Default,
+					   .elements=NULL, .options=ColumnDefaultOptions};
+	while (itr) {
+		Attribute *attribute = (Attribute *)itr->data;
+		if (strcmp(attribute->name, "horizontal-padding") == 0) {
+			column->options.hPadding = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "vertical-padding") == 0) {
+			column->options.vPadding = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "gravity") == 0) {
+			column->options.fixedElementGravity = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "background") == 0) {
+			column->color = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "weight") == 0) {
+			*weight = atoi(attribute->value);
+		}
+		Steel_Node_Next(itr);
+	}
+	ElementList_InitAtr(&column->elements, &column->fixedElements, root->childs);
+	return column;
+} 
 
 void Column_Free(Column *column) {
 	ElementList_Free(column->elements);
