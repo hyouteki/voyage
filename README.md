@@ -111,7 +111,8 @@ int main() {
 ```
 
 ## Getting Started
-Ensure you have Raylib installed. Follow the [Raylib installation guide](https://github.com/raysan5/raylib/wiki) for your operating system.	
+Ensure you have Raylib installed. Follow the [Raylib installation guide](https://github.com/raysan5/raylib/wiki) for your operating system.	<br>
+Clone the source code using `git clone --recursive --depth=1 https://github.com/hyouteki/voyage`.
 
 ### GNU/Linux
 ``` bash
