@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #ifdef _WIN64
-    #include "/raylib/raylib-5.0_win64_mingw-w64/include/raylib.h"
+    #include "./raylib/raylib-5.0_win64_mingw-w64/include/raylib.h"
 #elif __linux__
     #include <raylib.h>
 #else
