@@ -3,6 +3,7 @@
 
 #include "colors.h"
 #include "helper.h"
+#include "../cxmlp/node.h"
 
 typedef struct SpaceOptions {
 	Color bgColor;
@@ -14,12 +15,14 @@ typedef struct Space {
 	Vector2 pos;
 	u32 width;
 	u32 height;
+	char *id;
 	SpaceOptions options;
 } Space;
 
 #define SpaceDefaultOptions ((SpaceOptions){.bgColor=Voyage_LightGrey, .hOffset=10, .transparent=1})
 
 Space Space_Init(Vector2, u32, u32);
+Space Space_InitAtr(XmlNode *);
 void Space_SetOptions(Space *, SpaceOptions);
 void Space_Resize(Space *, u32);
 void Space_Reposition(Space *, Vector2);
@@ -30,6 +33,35 @@ void Space_Draw(Space);
 Space Space_Init(Vector2 pos, u32 width, u32 height) {
 	return (Space){.pos=pos, .width=width, .height=height, .options=SpaceDefaultOptions};
 }
+
+Space Space_InitAtr(XmlNode *root) {
+	if (strcmp(root->name, "space") != 0) {
+		Voyage_Xml_ErrorFmt("expected node <space>; but got '<%s>'", root->name);
+	}
+	Space space = (Space){.pos = Vector2Dummy, .width=0, .height=0, 
+						  .options=SpaceDefaultOptions};
+	Steel_Node *itr = Steel_LL_Head(root->attributes);
+	while (itr) {
+		Attribute *attribute = (Attribute *)itr->data;
+		if (strcmp(attribute->name, "background") == 0) {
+			space.options.bgColor = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "horizontal-offset") == 0) {
+			space.options.hOffset = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "transparent") == 0) {
+			space.options.transparent = strcmp(attribute->value, "true") == 0;
+		}
+		if (strcmp(attribute->name, "height") == 0) {
+			space.height = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "id") == 0) {
+			space.id = strdup(attribute->value);
+		}
+		Steel_Node_Next(itr);
+	}
+	return space;
+} 
 
 void Space_SetOptions(Space *space, SpaceOptions options) {
 	space->options = options;

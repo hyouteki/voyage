@@ -15,7 +15,12 @@ else
     fi
 fi
 
-FILENAME="xml_test"
+FILENAME="demo_xml"
+
+if [ $# -eq 1 ]; then
+  FILENAME=$1
+fi
+
 gcc $FILENAME.c -o $FILENAME $CFLAGS $LFLAGS
 
 if [[ $? -eq 0 ]]; then

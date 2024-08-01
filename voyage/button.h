@@ -23,6 +23,7 @@ typedef struct Button {
 	Vector2 pos;
 	int width;
 	char *text;
+	char *id;
 	ButtonOptions options;
 	void (*onClick)();
 } Button;
@@ -89,6 +90,9 @@ Button Button_InitAtr(XmlNode *root) {
 		}
 		if (strcmp(attribute->name, "text") == 0) {
 			button.text = strdup(attribute->value);
+		}
+		if (strcmp(attribute->name, "id") == 0) {
+			button.id = strdup(attribute->value);
 		}
 		Steel_Node_Next(itr);
 	}

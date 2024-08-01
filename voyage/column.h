@@ -32,6 +32,7 @@ Column Column_Init(Vector2, Vector2, Color);
 Column *Column_InitAtr(XmlNode *, u32 *);
 void Column_Free(Column *);
 void Column_AddElement(Column *, Element *, int);
+void *Column_GetElementById(Column *, char *);
 void Column_Resize(Column *, Vector2);
 void Column_Scroll(Column *, Vector2);
 void Column_ResizeReposition(Column *, Vector2, Vector2);
@@ -91,6 +92,12 @@ void Column_AddElement(Column *column, Element *element, int isFixed) {
 								 (Vector2){column->size.x-2*column->options.hPadding, -1});
 		ElementList_Add(&column->elements, element);
 	}
+}
+
+void *Column_GetElementById(Column *column, char *id) {
+	void *element = ElementList_GetElementById(column->elements, id);
+	if (element) return element;
+	return ElementList_GetElementById(column->fixedElements, id);
 }
 
 void Column_Resize(Column *column, Vector2 size) {

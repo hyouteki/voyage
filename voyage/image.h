@@ -9,6 +9,7 @@ typedef struct ImageContainer {
 	Vector2 pos;
 	Vector2 size;
 	Image *image;
+	char *id;
 	Texture2D *texture;
 	int *reloadTexture;
 } ImageContainer;
@@ -40,6 +41,9 @@ ImageContainer ImageContainer_InitAtr(XmlNode *root) {
 		Attribute *attribute = (Attribute *)itr->data;
 		if (strcmp(attribute->name, "src") == 0) {
 			*imageContainer.image = LoadImage(attribute->value);
+		}
+		if (strcmp(attribute->name, "src") == 0) {
+			imageContainer.id = strdup(attribute->value);
 		}
 		Steel_Node_Next(itr);
 	}

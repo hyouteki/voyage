@@ -3,6 +3,7 @@
 
 #include "colors.h"
 #include "helper.h"
+#include "../cxmlp/node.h"
 
 typedef struct InputOptions {
 	Color bgColor;
@@ -22,6 +23,7 @@ typedef struct Input {
 	Vector2 pos;
 	u32 width;
 	char *text;
+	char *id;
 	u32 cursorIndex;
 	enum Input_State {
 		Input_State_Active,
@@ -47,6 +49,7 @@ void InputDefaultOnEnter(Input input) {
 char cursorChar = '|';
 
 Input Input_Init(Vector2, u32, char *, void (*)(Input));
+Input Input_InitAtr(XmlNode *);
 void Input_SetOptions(Input *, InputOptions);
 void Input_Resize(Input *, u32);
 void Input_ResizeReposition(Input *, Vector2, u32);
@@ -64,6 +67,63 @@ Input Input_Init(Vector2 pos, u32 width, char *initialText, void (*onEnter)(Inpu
 				   .onEnter = onEnter? onEnter: &InputDefaultOnEnter, .cursorIndex=0,
 				   .state = Input_State_Inactive};
 }
+
+Input Input_InitAtr(XmlNode *root) {
+	if (strcmp(root->name, "input") != 0) {
+		Voyage_Xml_ErrorFmt("expected node <input>; but got '<%s>'", root->name);
+	}
+	Input input = (Input){.pos = Vector2Dummy, .width=0, .options=InputDefaultOptions,
+						  .onEnter=&InputDefaultOnEnter, .cursorIndex=0, .state=Input_State_Inactive};
+	Steel_Node *itr = Steel_LL_Head(root->attributes);
+	char *fontPath = NULL;
+	while (itr) {
+		Attribute *attribute = (Attribute *)itr->data;
+		if (strcmp(attribute->name, "background") == 0) {
+			input.options.bgColor = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "foreground") == 0) {
+			input.options.fgColor = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "border") == 0) {
+			input.options.border = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "accent") == 0) {
+			input.options.accent = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "font") == 0) {
+			fontPath = strdup(attribute->value);
+		}
+		if (strcmp(attribute->name, "font-size") == 0) {
+			input.options.fontSize = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "max-characters") == 0) {
+			input.options.maxChars = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "id") == 0) {
+			input.id = strdup(attribute->value);
+		}
+		if (strcmp(attribute->name, "text-spacing") == 0) {
+			input.options.textSpacing = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "horizontal-offset") == 0) {
+			input.options.hOffset = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "vertical-offset") == 0) {
+			input.options.vOffset = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "border-width") == 0) {
+			input.options.borderWidth = atoi(attribute->value);
+		}
+		Steel_Node_Next(itr);
+	}
+	if (fontPath) {
+		input.options.font = LoadFontEx(fontPath, input.options.fontSize, NULL, 0);
+	}
+	input.text = (char *)malloc(sizeof(char)*(input.options.maxChars+1));
+	input.text[0] = cursorChar;
+	input.text[1] = 0;
+	return input;
+} 
 
 void Input_SetOptions(Input *input, InputOptions options) {
 	input->options = options;

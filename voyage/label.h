@@ -27,6 +27,7 @@ typedef struct Label {
     Vector2 pos;
 	int width;
 	char *text;
+	char *id;
 	VecStr *vecstr;
     LabelOptions options;
 } Label;
@@ -99,6 +100,9 @@ Label Label_InitAtr(XmlNode *root) {
 		}
 		if (strcmp(attribute->name, "font") == 0) {
 			fontPath = strdup(attribute->value);
+		}
+		if (strcmp(attribute->name, "id") == 0) {
+			label.id = strdup(attribute->value);
 		}
 		if (strcmp(attribute->name, "font-size") == 0) {
 			label.options.fontSize = atoi(attribute->value);

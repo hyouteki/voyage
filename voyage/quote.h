@@ -7,6 +7,7 @@
 #include "helper.h"
 #include "label.h"
 #include "quote.h"
+#include "../cxmlp/node.h"
 
 typedef struct QuoteOptions {
     Color bgColor;
@@ -25,6 +26,7 @@ typedef struct Quote {
     Vector2 pos;
 	u32 width;
 	char *text;
+	char *id;
 	Label label;
     QuoteOptions options;
 } Quote;
@@ -38,6 +40,7 @@ typedef struct Quote {
 static void Quote_LabelReposition(Quote *);
 
 Quote Quote_Init(Vector2, u32, char *);
+Quote Quote_InitAtr(XmlNode *);
 void Quote_Reposition(Quote *, Vector2);
 void Quote_ResizeReposition(Quote *, Vector2, int);
 Vector2 Quote_Size(Quote);
@@ -57,6 +60,60 @@ Quote Quote_Init(Vector2 pos, u32 width, char *text) {
 	return (Quote){.pos=pos, .width=width, .text=text, .label=label,
 				   .options=QuoteDefaultOptions};
 }
+
+Quote Quote_InitAtr(XmlNode *root) {
+	if (strcmp(root->name, "quote") != 0) {
+		Voyage_Xml_ErrorFmt("expected node <quote>; but got '<%s>'", root->name);
+	}
+	QuoteOptions options = QuoteDefaultOptions;
+	Steel_Node *itr = Steel_LL_Head(root->attributes);
+	char *fontPath = NULL, *text = NULL, *id = NULL;
+	while (itr) {
+		Attribute *attribute = (Attribute *)itr->data;
+		if (strcmp(attribute->name, "background") == 0) {
+			options.bgColor = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "foreground") == 0) {
+			options.fgColor = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "accent") == 0) {
+			options.accent = Voyage_Color_FromString(attribute->value);
+		}
+		if (strcmp(attribute->name, "font") == 0) {
+			fontPath = strdup(attribute->value);
+		}
+		if (strcmp(attribute->name, "font-size") == 0) {
+			options.fontSize = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "text-spacing") == 0) {
+			options.textSpacing = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "vertical-text-spacing") == 0) {
+			options.textSpacingV = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "horizontal-offset") == 0) {
+			options.hOffset = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "vertical-offset") == 0) {
+			options.vOffset = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "accent-width") == 0) {
+			options.accentWidth = atoi(attribute->value);
+		}
+		if (strcmp(attribute->name, "text") == 0) {
+			text = strdup(attribute->value);
+		}
+		if (strcmp(attribute->name, "id") == 0) {
+			id = strdup(attribute->value);
+		}
+		Steel_Node_Next(itr);
+	}
+	if (fontPath) {
+		options.font = LoadFontEx(fontPath, options.fontSize, NULL, 0);
+	}
+	Label label = Label_Init(Vector2Dummy, 0, text);
+	return (Quote){.pos=Vector2Dummy, .width=0, .text=text, .id=id, .label=label, .options=options};
+} 
 
 void Quote_Reposition(Quote *quote, Vector2 pos) {
 	quote->pos = pos;

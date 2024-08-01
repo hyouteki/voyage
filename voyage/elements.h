@@ -10,6 +10,7 @@
 #include "quote.h"
 #include "space.h"
 #include "input.h"
+#include "helper.h"
 #include "../cxmlp/node.h"
 
 typedef enum {
@@ -48,6 +49,7 @@ Vector2 Element_Size(Element);
 void Element_DeInit(Element *);
 void ElementList_Draw(ElementList *);
 void ElementList_AttachListener(ElementList *);
+void *ElementList_GetElementById(ElementList *, char *);
 
 void ElementList_Add(ElementList **, Element *);
 void ElementList_Free(ElementList *);
@@ -74,15 +76,23 @@ void ElementList_InitAtr(ElementList **elements, ElementList **fixedElements,
 		if (strcmp(child->name, "button") == 0) {
 			element->type = Element_Button;
 			element->button = Button_InitAtr(child);
-		}
-		if (strcmp(child->name, "image") == 0) {
+		} else if (strcmp(child->name, "image") == 0) {
 			element->type = Element_ImageContainer;
 			element->imageContainer = ImageContainer_InitAtr(child);
-		}
-		if (strcmp(child->name, "label") == 0) {
+		} else if (strcmp(child->name, "label") == 0) {
 			element->type = Element_Label;
 			element->label = Label_InitAtr(child);
-		}
+		} else if (strcmp(child->name, "input") == 0) {
+			element->type = Element_Input;
+			element->input = Input_InitAtr(child);
+		} else if (strcmp(child->name, "space") == 0) {
+			element->type = Element_Space;
+			element->space = Space_InitAtr(child);
+		} else if (strcmp(child->name, "quote") == 0) {
+			element->type = Element_Quote;
+			element->quote = Quote_InitAtr(child);
+		} else continue;
+		
 		ElementList_Add(fixed? fixedElements: elements, element);
 		Steel_Node_Next(itr);
 	}
@@ -229,6 +239,39 @@ void ElementList_AttachListener(ElementList *list) {
 		}
 		itr = itr->next;
 	}
+}
+
+void *ElementList_GetElementById(ElementList *list, char *id) {
+	ElementList *itr = list;
+	while (itr) {
+		Element *element = itr->element;
+		switch (element->type) {
+		case Element_Button:
+			if (strcmp(element->button.id, id) == 0) return &element->button;
+			break;
+		case Element_ImageContainer:
+			if (strcmp(element->imageContainer.id, id) == 0) return &element->imageContainer;
+			break;
+		case Element_Label:
+			if (strcmp(element->label.id, id) == 0) return &element->label;
+			break;
+		case Element_Quote:
+			if (strcmp(element->quote.id, id) == 0) return &element->quote;
+			break;
+		case Element_Space:
+			if (strcmp(element->space.id, id) == 0) return &element->space;
+			break;
+		case Element_Input:
+			if (strcmp(element->input.id, id) == 0) return &element->input;
+			break;
+		default:
+			fprintf(stderr, "Error: invalid ElementType(%d) in "
+					"Function(%s)\n", element->type, __func__);
+			exit(1);
+		}
+		itr = itr->next;
+	}
+	return NULL;
 }
 
 void ElementList_Add(ElementList **list, Element *node) {

@@ -36,6 +36,7 @@ Row Row_Init(Vector2, Vector2, u32 len, Column *[len], u32[len]);
 Row *Row_InitAtr(XmlNode *);
 void Row_Free(Row *);
 void Row_AddColumn(Row *, Column *, u32);
+void *Row_GetElementById(Row *, char *);
 void Row_ScrollEventHandler(Row *);
 void Row_AttachListeners(Row *);
 void Row_Resize(Row *, Vector2);
@@ -108,6 +109,17 @@ void Row_Free(Row *row) {
 void Row_AddColumn(Row *row, Column *column, u32 weight) {
 	ColumnList_Add(&row->columns, column, weight);
 	Row_Resize(row, row->size);
+}
+
+
+void *Row_GetElementById(Row *row, char *id) {
+	ColumnList *itr = row->columns;
+	while (itr) {
+		void *element = Column_GetElementById(itr->column, id);
+		if (element) return element;
+		itr = itr->next;
+	}
+	return NULL;
 }
 
 void Row_ScrollEventHandler(Row *row) {
