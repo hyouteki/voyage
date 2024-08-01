@@ -14,9 +14,9 @@ Voyage is a versatile framework that supports writing GUIs in both C and XML. Th
 
 | Platform | Status             | Notes                            |
 |----------|--------------------|----------------------------------|
-| Linux    | ✔️Supported | Full functionality available     |
-| Windows  | ✔️Supported | Full functionality available     |
-| Web      | ✖️Planned   | Future support under development |
+| Linux    | ✔️ Supported | Full functionality available     |
+| Windows  | ✔️ Supported | Full functionality available     |
+| Web      | ✖️ Planned   | Future support under development |
 
 
 ## Demo
